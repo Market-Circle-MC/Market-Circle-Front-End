@@ -16,24 +16,24 @@ const router = createBrowserRouter([
     errorElement: <div>404 Not found</div>,
     children: [
       {
-        path: "/login",
+        path: "login",
         element: <Login />,
       },
       {
-        path: "/cart",
+        path: "cart",
         element: <Cart />,
       },
       {
-        path: "/",
+        path: "",
         element: <Home />,
       },
 
       {
-        path: "/product-details/:id",
+        path: "product-details/:id",
         element: <ProductDetails />,
       },
       {
-        path: "/product-list/:category",
+        path: "product-list/:category",
         element: <ProductList />,
       },
     ],
