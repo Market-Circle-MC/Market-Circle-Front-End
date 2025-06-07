@@ -6,4 +6,9 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: "/Market-Circle/",
+  build: {
+    rollupOptions: {
+      external: ["react-router-dom"],
+    },
+  },
 });
