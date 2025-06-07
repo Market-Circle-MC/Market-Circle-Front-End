@@ -11,30 +11,29 @@ import ProductList from "./pages/ProductList.jsx";
 
 const router = createBrowserRouter([
   {
-    path: "/Market-Circle",
+    path: "/",
     element: <App />,
     errorElement: <div>404 Not found</div>,
     children: [
       {
-        path: "/Market-Circle/login",
+        path: "/login",
         element: <Login />,
       },
       {
-        path: "/Market-Circle/cart",
+        path: "/cart",
         element: <Cart />,
       },
-
       {
-        path: "/Market-Circle/home",
+        path: "/",
         element: <Home />,
       },
 
       {
-        path: "/Market-Circle/product-details/:id",
+        path: "/product-details/:id",
         element: <ProductDetails />,
       },
       {
-        path: "/Market-Circle/product-list/:category",
+        path: "/product-list/:category",
         element: <ProductList />,
       },
     ],

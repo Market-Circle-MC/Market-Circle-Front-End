@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import HeroBanner from "../components/Layouts/HeroBanner";
 import ProductCard from "../components/ProductCard";
-import { ArrowLeft2, ArrowRight2 } from "iconsax-react";
+import { ArrowRight2 } from "iconsax-react";
 import Categories from "../components/Categories";
 export default function Home() {
   const [products, setProdsucts] = useState([]);
@@ -37,7 +37,7 @@ export default function Home() {
                 Shop From <span className="text-[#53b32d]">Bath & Body</span>
               </h2>
               <a
-                href="/Market-Circle/product-list/bath-and-body"
+                href="/product-list/bath-and-body"
                 className="flex justify-center items-center gap-1 cursor-pointer"
               >
                 View All
@@ -65,7 +65,7 @@ export default function Home() {
                 <span className="text-[#53b32d]">Friuts & Vegetables</span>
               </h2>
               <a
-                href="/Market-Circle/product-list/friuts-and-vegetables"
+                href="/product-list/friuts-and-vegetables"
                 className="flex justify-center items-center gap-1 cursor-pointer"
               >
                 View All
@@ -93,7 +93,7 @@ export default function Home() {
                 <span className="text-[#53b32d]">Dairy & Breakfast</span>
               </h2>
               <a
-                href="/Market-Circle/product-list/dairy-and-breakfast"
+                href="/product-list/dairy-and-breakfast"
                 className="flex justify-center items-center gap-1 cursor-pointer"
               >
                 View All

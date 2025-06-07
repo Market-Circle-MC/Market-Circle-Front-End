@@ -1,7 +1,4 @@
 import { GROCERY } from "../../constants";
-import CartegoryCard from "../CartegoryCard";
-import { CATEGORIES } from "../../constants";
-import { Category } from "iconsax-react";
 
 export default function HeroBanner() {
   return (

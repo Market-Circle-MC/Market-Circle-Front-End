@@ -1,4 +1,3 @@
-import React from "react";
 import { Trash } from "iconsax-react";
 import { GROCERY } from "../constants";
 const Cart = () => {

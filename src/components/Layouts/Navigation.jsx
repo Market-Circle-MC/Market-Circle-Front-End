@@ -5,7 +5,7 @@ const Navigation = () => {
       <main className="flex justify-between w-full items-center">
         <section className="">
           <NavLink
-            to={"/Market-Circle/home"}
+            to={"/"}
             className="flex flex-row p-4 text-4xl font-extrabold"
           >
             <span className="relative">
@@ -53,7 +53,7 @@ const Navigation = () => {
         </section>
         <section className="flex gap-4">
           <NavLink
-            to="/Market-Circle/login"
+            to="/login"
             className=" pointer text-[#797979] flex gap-1 items-center"
           >
             <svg

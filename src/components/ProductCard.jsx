@@ -11,7 +11,7 @@ const ProductCard = ({ id, image, title, price, oldPrice, discount }) => {
         )}
 
         <a
-          href={`/Market-Circle/product-details/${id}`}
+          href={`/product-details/${id}`}
           className=" flex items-center justify-center "
         >
           <img src={image} alt="Product" className="w-30 rounded-xl " />
