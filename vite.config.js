@@ -8,11 +8,7 @@ export default defineConfig({
   base: "/Market-Circle/",
   build: {
     rollupOptions: {
-<<<<<<< HEAD
-      external: ["react-router-dom"],
-=======
       external: ["react-router-dom", "iconsax-react"],
->>>>>>> 9573da3 (Market Circle features)
     },
   },
 });
