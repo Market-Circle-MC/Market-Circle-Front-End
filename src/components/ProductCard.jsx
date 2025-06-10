@@ -5,7 +5,7 @@ const ProductCard = ({ id, image, title, price, oldPrice, discount }) => {
     <div className="max-w-sm border border-gray-200 shadow-sm w-66x rounded-2xl gap-5 bg-white flex flex-col justify-between  relative group hover:shadow-xl transition-all duration-300">
       <div className=" max-h-60 h-60 flex items-center justify-center ">
         {discount && (
-          <div className="absolute top-3 left-3 bg-[#eb4553] text-white text-xs font-bold px-2 py-1 rounded">
+          <div className="absolute top-3  bg-red-100 text-red-600 left-3 text-xs font-bold px-2 py-1 rounded">
             {discount}% OFF
           </div>
         )}

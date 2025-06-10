@@ -114,7 +114,7 @@ export default function ProductDetails() {
               <span className="text-lg text-gray-500 line-through">
                 GHS {product.price}
               </span>
-              <span className="text-sm bg-red-100 text-red-600 px-2 py-1 rounded">
+              <span className=" bg-red-100 text-red-600 left-3 text-xs font-bold px-2 py-1 rounded">
                 40% OFF
               </span>
             </div>
