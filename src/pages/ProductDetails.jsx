@@ -62,8 +62,21 @@ export default function ProductDetails() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
+<<<<<<< HEAD
       <section className="flex flex-col md:flex-row gap-8">
         <section className="md:w-1/2 flex gap-4">
+=======
+<<<<<<< HEAD
+      <section className="flex flex-col md:flex-row gap-8">
+        <section className="md:w-1/2 flex gap-4">
+=======
+      {/* Main product section */}
+      <section className="flex flex-col md:flex-row gap-8">
+        {/* Left column - product images */}
+        <section className="md:w-1/2 flex gap-4">
+          {/* Thumbnail gallery - vertical left side */}
+>>>>>>> 5478ac39fb526005bc36d8292a82c405b5c73b9c
+>>>>>>> 6ab0491ec3d6664282d9984fe9ef78e9f744b906
           <div className="flex flex-col gap-2 w-20">
             {thumbnails.map((thumb, index) => (
               <div
@@ -84,6 +97,10 @@ export default function ProductDetails() {
               </div>
             ))}
           </div>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6ab0491ec3d6664282d9984fe9ef78e9f744b906
           <div className="flex-1 rounded-lg overflow-hidden bg-white p-4">
             <img
               src={selectedImage || product.image}
@@ -102,14 +119,56 @@ export default function ProductDetails() {
             <div className="text-sm text-gray-500">{product.category}</div>
           </header>
 
+<<<<<<< HEAD
+=======
+=======
+
+          {/* Main product image */}
+          <div className="flex-1 rounded-lg overflow-hidden bg-white p-4">
+            <img
+              src={selectedImage || product.image}
+              alt={product.title}
+              className="w-full h-auto object-contain max-h-96 mx-auto"
+              onError={(e) =>
+                (e.target.src = "https://via.placeholder.com/400")
+              }
+            />
+          </div>
+        </section>
+
+        {/* Right column - product info */}
+        <section className="md:w-1/2">
+          {/* Product header */}
+          <header className="mb-4">
+            <h1 className="text-2xl font-bold">{product.title}</h1>
+            <div className="text-sm text-gray-500">{product.category}</div>
+          </header>
+
+          {/* Short description */}
+>>>>>>> 5478ac39fb526005bc36d8292a82c405b5c73b9c
+>>>>>>> 6ab0491ec3d6664282d9984fe9ef78e9f744b906
           <section className="mb-6">
             <p className="text-gray-700">{product.description}</p>
           </section>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6ab0491ec3d6664282d9984fe9ef78e9f744b906
           <section className="border-t border-b border-gray-200 py-4 my-4">
             <div className="flex items-center gap-4 mb-4">
               <span className="text-2xl font-bold text-green-600">
                 GHS {(product.price * 0.6).toFixed(2)}
+<<<<<<< HEAD
+=======
+=======
+          {/* Price and action buttons */}
+          <section className="border-t border-b border-gray-200 py-4 my-4">
+            <div className="flex items-center gap-4 mb-4">
+              <span className="text-2xl font-bold text-green-600">
+                GHS {(product.price * 0.6).toFixed(2)} {/* 40% discount */}
+>>>>>>> 5478ac39fb526005bc36d8292a82c405b5c73b9c
+>>>>>>> 6ab0491ec3d6664282d9984fe9ef78e9f744b906
               </span>
               <span className="text-lg text-gray-500 line-through">
                 GHS {product.price}
@@ -119,6 +178,13 @@ export default function ProductDetails() {
               </span>
             </div>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+            {/* Quantity Selector */}
+>>>>>>> 5478ac39fb526005bc36d8292a82c405b5c73b9c
+>>>>>>> 6ab0491ec3d6664282d9984fe9ef78e9f744b906
             <div className="flex items-center gap-4 mb-4">
               <span className="font-medium">Quantity:</span>
               <div className="flex items-center border border-gray-300 rounded-md">
@@ -142,6 +208,13 @@ export default function ProductDetails() {
               Order on WhatsApp
             </button>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+            {/* Special offer table */}
+>>>>>>> 5478ac39fb526005bc36d8292a82c405b5c73b9c
+>>>>>>> 6ab0491ec3d6664282d9984fe9ef78e9f744b906
             <div className="bg-gray-100 p-3 rounded-md">
               <table className="w-full">
                 <thead>
@@ -184,6 +257,13 @@ export default function ProductDetails() {
             </div>
           </section>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+          {/* Payment and warranty info */}
+>>>>>>> 5478ac39fb526005bc36d8292a82c405b5c73b9c
+>>>>>>> 6ab0491ec3d6664282d9984fe9ef78e9f744b906
           <section className="mb-6">
             <div className="mb-3">
               <span className="font-medium">Payment.</span> Payment upon receipt
@@ -197,6 +277,13 @@ export default function ProductDetails() {
             </div>
           </section>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+          {/* Action buttons */}
+>>>>>>> 5478ac39fb526005bc36d8292a82c405b5c73b9c
+>>>>>>> 6ab0491ec3d6664282d9984fe9ef78e9f744b906
           <section className="flex gap-4 mb-8">
             <button className="flex items-center gap-1 text-gray-700 hover:text-green-600">
               <span>❤️</span> Add to wishlist
@@ -211,6 +298,13 @@ export default function ProductDetails() {
         </section>
       </section>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+      {/* Description and reviews section */}
+>>>>>>> 5478ac39fb526005bc36d8292a82c405b5c73b9c
+>>>>>>> 6ab0491ec3d6664282d9984fe9ef78e9f744b906
       <section className="mt-8 border-t border-gray-200 pt-6">
         <div className="flex gap-4 border-b border-gray-200 pb-2">
           <button
