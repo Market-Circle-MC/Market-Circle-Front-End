@@ -1,6 +1,7 @@
 import Categories from "../components/Categories";
 import { ArrowRight2, Category, ArrowLeft2 } from "iconsax-react";
 import { useEffect, useState } from "react";
+import { CATEGORIES } from "../constants";
 import ProductCard from "../components/ProductCard";
 export default function ProductList() {
   const [products, setProducts] = useState([]);
@@ -68,16 +69,27 @@ export default function ProductList() {
           </div>
           <div className="flex flex-col gap-3 px-2 py-5">
             <h4 className="text-lg font-semibold">Product Status</h4>
-            <div>
-              <div className="flex gap-2 items-center">
-                <input type="checkbox" />
+            <div className="flex flex-col gap-4">
+              <div className="flex gap-2 items-center ">
+                <input className="w-4 h-4" type="checkbox" />
                 <label htmlFor="In Stock">In Stock</label>
               </div>
               <div className="flex gap-2 items-center">
-                <input type="checkbox" />
+                <input className="w-4 h-4 " type="checkbox" />
                 <label htmlFor="On Sale">On Sale</label>
               </div>
             </div>
+            <section className="flex flex-col gap-4 font-sans">
+              <h3 className="font-semibold text-lg">Proudct Categories</h3>
+              <div className="space-y-3 font-medium  text-sm">
+                {CATEGORIES.map((category, index) => (
+                  <div key={index} className="flex gap-2 items-center">
+                    <input className="w-4 h-4" type="checkbox" />
+                    <h4>{category.title} </h4>
+                  </div>
+                ))}
+              </div>
+            </section>
           </div>
         </div>
         <div className="px-8 pt-6 flex-1 flex flex-col gap-5">
