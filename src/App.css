@@ -1,1 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100..900&display=swap');
 @import "tailwindcss";
+
+@theme{
+    --font-emma:"Heebo", sans-serif;
+}
+
+*{
+    font-family: "Heebo", sans-serif;
+}
+
+.marketGreen{
+    background-color: #53b32d !important;
+
+}
+.marketGreen:hover{
+    background-color: rgb(2, 152, 2) !important;
+}

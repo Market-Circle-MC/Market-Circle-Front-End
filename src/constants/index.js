@@ -6,6 +6,7 @@ import PLAY from "../assets/images/play.png";
 import FULLCART from "../assets/images/fullcart.jpeg";
 import GROCERY from "../assets/images/grocery.png";
 import CARTS from "../assets/images/carts.png";
+import CARTTS from "../assets/images/Cartt.png";
 
 const CATEGORIES = [
   {
@@ -60,4 +61,5 @@ export {
   FULLCART,
   GROCERY,
   CARTS,
+  CARTTS,
 };

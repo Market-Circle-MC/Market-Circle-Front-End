@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { Minus, Add } from "iconsax-react";
 
 export default function ProductDetails() {
   const path = useLocation();
@@ -99,7 +100,9 @@ export default function ProductDetails() {
         <section className="md:w-1/2">
           <header className="mb-4">
             <h1 className="text-2xl font-bold">{product.title}</h1>
-            <div className="text-sm text-gray-500">{product.category}</div>
+            <div className="text-sm text-gray-500 capitalize">
+              {product.category}
+            </div>
           </header>
 
           <section className="mb-6">
@@ -109,10 +112,10 @@ export default function ProductDetails() {
           <section className="border-t border-b border-gray-200 py-4 my-4">
             <div className="flex items-center gap-4 mb-4">
               <span className="text-2xl font-bold text-green-600">
-                GHS {(product.price * 0.6).toFixed(2)}
+                GH₵ {(product.price * 0.6).toFixed(2)}
               </span>
               <span className="text-lg text-gray-500 line-through">
-                GHS {product.price}
+                GH₵ {product.price}
               </span>
               <span className=" bg-red-100 text-red-600 left-3 text-xs font-bold px-2 py-1 rounded">
                 40% OFF
@@ -121,56 +124,39 @@ export default function ProductDetails() {
 
             <div className="flex items-center gap-4 mb-4">
               <span className="font-medium">Quantity:</span>
-              <div className="flex items-center border border-gray-300 rounded-md">
+              <div className="flex items-center border-0 border-gray-300 rounded-md">
                 <button
                   onClick={decreaseQuantity}
-                  className="px-3 py-1 bg-gray-100 hover:bg-gray-200"
+                  className="px-3 py-3 bg-gray-300 cursor-pointer rounded-md hover:bg-gray-100"
                 >
-                  -
+                  <Minus size="18" className="stroke-black" />
                 </button>
                 <span className="px-4 py-1">{quantity}</span>
                 <button
                   onClick={increaseQuantity}
-                  className="px-3 py-1 bg-gray-100 hover:bg-gray-200"
+                  className="px-3 py-3 marketGreen cursor-pointer rounded-md hover:bg-green-700"
                 >
-                  +
+                  <Add size="18" className="stroke-white" />
                 </button>
               </div>
             </div>
 
-            <button className="bg-[#53b32d]  border-[#53b32d] text-white hover:bg-green-700 hover:border-green-700 font-medium py-2 px-6 rounded-md mb-4 w-52 transition-colors">
+            <button className="bg-[#53b32d] cursor-pointer border-[#53b32d] text-white hover:bg-green-700 hover:border-green-700 font-medium py-2 px-6 rounded-md mb-4 w-52 transition-colors">
               Order on WhatsApp
             </button>
 
-            <div className="bg-gray-100 p-3 rounded-md">
+            <div className=" p-3 rounded-md">
               <table className="w-full">
-                <thead>
-                  <tr className="text-xs text-gray-500">
-                    <th className="text-left pb-1">Special Offer:</th>
-                    <th>81</th>
-                    <th>66</th>
-                    <th>50</th>
-                    <th>02</th>
-                    <th className="text-right">
-                      Remains until the end of the offer.
-                    </th>
-                  </tr>
-                </thead>
                 <tbody>
                   <tr className="text-center">
-                    <td className="text-left font-medium">
+                    <td className="text-left flex gap-10 font-medium">
                       <button
                         onClick={handleAddToCart}
                         className="hover:bg-green-700 w-32 cursor-pointer border border-[#53b32d] bg-[#53b32d] h-10 text-white font-medium rounded"
                       >
                         Add to cart
                       </button>
-                    </td>
-                    <td>✅️</td>
-                    <td>✅️</td>
-                    <td>✅️</td>
-                    <td>✅️</td>
-                    <td>
+
                       <button
                         className="bg-black hover:bg-gray-800 cursor-pointer text-white font-medium py-1 px-3 rounded h-10 w-32"
                         onClick={handleAddToCart}
