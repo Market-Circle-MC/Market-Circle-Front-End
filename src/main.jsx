@@ -8,6 +8,11 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
 import ProductList from "./pages/ProductList.jsx";
+import CheckoutPage from "./pages/CheckoutPage.jsx";
+import OrderHistory from "./pages/OrderHistory.jsx";
+import UserDashboard from "./pages/UserDashboard.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +32,6 @@ const router = createBrowserRouter([
         path: "",
         element: <Home />,
       },
-
       {
         path: "product-details/:id",
         element: <ProductDetails />,
@@ -36,12 +40,30 @@ const router = createBrowserRouter([
         path: "product-list/:category",
         element: <ProductList />,
       },
+      {
+        path: "checkout",
+        element: <CheckoutPage />,
+      },
+      {
+        path: "orderhistory",
+        element: <OrderHistory />,
+      },
+      {
+        path: "userdashboard",
+        element: <UserDashboard />,
+      },
+      {
+        path: "admindashboard",
+        element: <AdminDashboard />,
+      },
     ],
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+      <RouterProvider router={router} />
+    </GoogleOAuthProvider>
   </StrictMode>
 );
