@@ -1,7 +1,12 @@
 import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import { CartContext } from "../../context/cartContext";
+
 const Navigation = () => {
+  const { cart, setCart } = useContext(CartContext);
+
   return (
-    <nav className=" px-32 h-24 flex items-center justify-between">
+    <nav className="px-32 h-24 flex items-center justify-between fixed w-full bg-white z-50">
       <main className="flex justify-between w-full items-center">
         <section className="">
           <NavLink
@@ -94,6 +99,9 @@ const Navigation = () => {
             </svg>
 
             <h3>Cart</h3>
+            <span className="border px-2 rounded-full bg-red-500 text-white">
+              {cart.length}
+            </span>
           </NavLink>
         </section>
       </main>

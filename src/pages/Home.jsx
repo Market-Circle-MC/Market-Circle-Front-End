@@ -1,10 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import HeroBanner from "../components/Layouts/HeroBanner";
 import ProductCard from "../components/ProductCard";
 import { ArrowRight2 } from "iconsax-react";
 import Categories from "../components/Categories";
+import { CartContext } from "../context/cartContext";
+
 export default function Home() {
+  const { addToCart } = useContext(CartContext);
   const [products, setProdsucts] = useState([]);
+  const [isAdding, setIsAdding] = useState(false);
+  // const [cart, setCart] = useState([]);
+
+  // const addToCart = (product) => {
+  //   // setIsAdding(true);
+  //   setCart((prev) => [...prev, product]);
+  // };
+
   // const method = "GET";
   const baseUrl = "https://fakestoreapi.com/";
   const endpoint = "/products";
@@ -54,6 +65,8 @@ export default function Home() {
                   price={product.price}
                   oldPrice={product.oldPrice || 200}
                   discount={product.discount || 30}
+                  isAdding={isAdding}
+                  addToCart={() => addToCart(product)}
                 />
               ))}
             </section>

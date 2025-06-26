@@ -1,47 +1,58 @@
 import React, { useState } from "react";
 import Button from "./Button";
 
-const ProductCard = ({ id, image, title, price, oldPrice, discount }) => {
-  const [isAdding, setIsAdding] = useState(false);
+const ProductCard = ({
+  id,
+  image,
+  title,
+  price,
+  oldPrice,
+  discount,
+  isAdding,
+  addToCart,
+}) => {
+  // const [isAdding, setIsAdding] = useState(false);
 
-  const addToCart = async () => {
-    setIsAdding(true);
+  // const addToCart = async () => {
+  //   setIsAdding(true);
 
-    try {
-      const cartData = {
-        // userId: 1, // You can change this to the actual user ID
-        products: [
-          {
-            id,
-            title,
-            price,
-            description: "", // Add description if available
-            category: "", // Add category if available
-            image,
-            oldPrice,
-            discount,
-          },
-        ],
-      };
+  // try {
+  //   const cartData = {
+  //     id: 1,
+  //     userId: 1,
+  //     products: [
+  //       {
+  //         id,
+  //         title,
+  //         price,
+  //         description: "",
+  //         category: "",
+  //         image,
+  //         oldPrice,
+  //         discount,
+  //       },
+  //     ],
+  //   };
 
-      const response = await fetch("https://fakestoreapi.com/carts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(cartData),
-      });
+  //   const response = await fetch("https://fakestoreapi.com/carts", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(cartData),
+  //   });
 
-      const result = await response.json();
-      console.log("Product added to cart:", result);
-      alert("Product added to cart successfully!");
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-      alert("Failed to add product to cart");
-    } finally {
-      setIsAdding(false);
-    }
-  };
+  //   const result = await response.json();
+  //   console.log("Product added to cart:", result);
+  //   alert("Product added to cart successfully!");
+  // } catch (error) {
+  //   console.error("Error adding to cart:", error);
+  //   alert("Failed to add product to cart");
+  // } finally {
+  //   setIsAdding(false);
+  // }
+
+  // };
 
   return (
     <div className="max-w-sm border border-gray-200 shadow-sm w-66x rounded-2xl gap-5 bg-white flex flex-col justify-between relative group hover:shadow-xl transition-all duration-300">

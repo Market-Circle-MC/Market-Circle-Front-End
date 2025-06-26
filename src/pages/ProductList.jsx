@@ -1,12 +1,16 @@
 import Categories from "../components/Categories";
 import { ArrowRight2, Category, ArrowLeft2 } from "iconsax-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { CATEGORIES } from "../constants";
 import ProductCard from "../components/ProductCard";
+import { CartContext } from "../context/cartContext";
+
 export default function ProductList() {
   const [products, setProducts] = useState([]);
   const baseUrl = "https://fakestoreapi.com/";
   const endpoint = "/products";
+
+  const { addToCart } = useContext(CartContext);
 
   const url = baseUrl + endpoint;
 
@@ -130,6 +134,7 @@ export default function ProductList() {
                 price={product.price}
                 oldPrice={product.oldPrice || 200}
                 discount={product.discount || 30}
+                addToCart={() => addToCart(product)}
               />
             ))}
           </section>

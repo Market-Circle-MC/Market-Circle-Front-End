@@ -1,104 +1,114 @@
 import { Trash, Minus, Add, InfoCircle, ShoppingCart } from "iconsax-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import { CartContext } from "../context/cartContext";
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const baseUrl = "https://fakestoreapi.com";
+  const {
+    cart,
+    handleRemove,
+    handleIncrement,
+    handleDecrement,
+    subtotal,
+    total,
+    deliveryFee,
+  } = useContext(CartContext);
+  // const [cartItems, setCartItems] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const baseUrl = "https://fakestoreapi.com";
 
-  useEffect(() => {
-    const fetchCartData = async () => {
-      try {
-        // Fetch cart data
-        const cartsResponse = await fetch(`${baseUrl}/carts`);
-        const cartsData = await cartsResponse.json();
+  // useEffect(() => {
+  //   // const fetchCartData = async () => {
+  //   //   try {
+  //   //     // Fetch cart data
+  //   //     const cartsResponse = await fetch(`${baseUrl}/carts`);
+  //   //     const cartsData = await cartsResponse.json();
 
-        // Get all product IDs from all carts
-        const productIds = cartsData.flatMap((cart) =>
-          cart.products.map((product) => product.productId)
-        );
+  //   //     // Get all product IDs from all carts
+  //   //     const productIds = cartsData.flatMap((cart) =>
+  //   //       cart.products.map((product) => product.productId)
+  //   //     );
 
-        // Fetch details for all unique products
-        const productsResponse = await Promise.all(
-          [...new Set(productIds)].map((id) =>
-            fetch(`${baseUrl}/products/${id}`).then((res) => res.json())
-          )
-        );
+  //   //     // Fetch details for all unique products
+  //   //     const productsResponse = await Promise.all(
+  //   //       [...new Set(productIds)].map((id) =>
+  //   //         fetch(`${baseUrl}/products/${id}`).then((res) => res.json())
+  //   //       )
+  //   //     );
 
-        // Combine cart items with product details
-        const combinedItems = cartsData.flatMap((cart) =>
-          cart.products.map((item) => {
-            const product = productsResponse.find(
-              (p) => p.id === item.productId
-            );
-            return {
-              ...item,
-              ...product,
-              quantity: item.quantity || 1,
-            };
-          })
-        );
+  //   //     // Combine cart items with product details
+  //   //     const combinedItems = cartsData.flatMap((cart) =>
+  //   //       cart.products.map((item) => {
+  //   //         const product = productsResponse.find(
+  //   //           (p) => p.id === item.productId
+  //   //         );
+  //   //         return {
+  //   //           ...item,
+  //   //           ...product,
+  //   //           quantity: item.quantity || 1,
+  //   //         };
+  //   //       })
+  //   //     );
 
-        setCartItems(combinedItems);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //   //     setCartItems(combinedItems);
+  //   //   } catch (error) {
+  //   //     console.error("Error fetching data:", error);
+  //   //   } finally {
+  //   //     setLoading(false);
+  //   //   }
+  //   // };
 
-    fetchCartData();
-  }, []);
+  //   fetchCartData();
+  // }, []);
 
-  const handleDecrement = (id) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.productId === id
-          ? { ...item, quantity: Math.max(1, item.quantity - 1) }
-          : item
-      )
-    );
-  };
+  // const handleDecrement = (id) => {
+  //   setCartItems((prevItems) =>
+  //     prevItems.map((item) =>
+  //       item.productId === id
+  //         ? { ...item, quantity: Math.max(1, item.quantity - 1) }
+  //         : item
+  //     )
+  //   );
+  // };
 
-  const handleIncrement = (id) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.productId === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
-  };
+  // const handleIncrement = (id) => {
+  //   setCartItems((prevItems) =>
+  //     prevItems.map((item) =>
+  //       item.productId === id ? { ...item, quantity: item.quantity + 1 } : item
+  //     )
+  //   );
+  // };
 
-  const handleRemove = (id) => {
-    setCartItems((prevItems) =>
-      prevItems.filter((item) => item.productId !== id)
-    );
-  };
+  // const handleRemove = (id) => {
+  //   setCartItems((prevItems) =>
+  //     prevItems.filter((item) => item.productId !== id)
+  //   );
+  // };
 
-  const subtotal = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
-  const deliveryFee = 20;
-  const total = subtotal + deliveryFee;
+  // const subtotal = cartItems.reduce(
+  //   (acc, item) => acc + item.price * item.quantity,
+  //   0
+  // );
+  // const deliveryFee = 20;
+  // const total = subtotal + deliveryFee;
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div className="max-w-5xls w-full px-36 flex flex-col justify-between p-4">
       <h1 className="text-3xl font-bold mb-6">
-        Your Cart ({cartItems.length}) items
+        Your Cart ({cart.length}) items
       </h1>
 
-      {cartItems.length ? (
+      {cart.length ? (
         <div className="flex gap-3 w-full">
           {/* Cart Items */}
           <div className="flex-1 space-y-1">
-            {cartItems.map((item) => (
+            {cart.map((item) => (
               <div
-                key={`${item.productId}-${Math.random()}`}
+                key={`${item.id}-${Math.random()}`}
                 className="flex bg-white p-2 flex-col border-t border-gray-300"
               >
                 <div className="flex item-center justify-between">
@@ -131,7 +141,7 @@ const Cart = () => {
                 </div>
                 <div className="flex justify-between items-center">
                   <button
-                    onClick={() => handleRemove(item.productId)}
+                    onClick={() => handleRemove(item.id)}
                     className="text-red-400 w-44 hover:text-red-700 p-4 flex cursor-pointer items-center"
                   >
                     <Trash className="fill-red-400 w-6 h-6" />
@@ -139,14 +149,14 @@ const Cart = () => {
                   </button>
                   <div className="flex items-center gap-4">
                     <button
-                      onClick={() => handleDecrement(item.productId)}
+                      onClick={() => handleDecrement(item.id)}
                       className="w-10 h-10 cursor-pointer bg-gray-100 hover:bg-gray-200 flex items-center justify-center p-2 rounded-lg"
                     >
                       <Minus size="18" className="stroke-black" />
                     </button>
                     <span>{item.quantity}</span>
                     <button
-                      onClick={() => handleIncrement(item.productId)}
+                      onClick={() => handleIncrement(item.id)}
                       className="w-10 h-10 cursor-pointer marketGreen hover:bg-gray-200 flex items-center justify-center p-2 rounded-lg"
                     >
                       <Add size="18" className="stroke-white" />
@@ -164,14 +174,17 @@ const Cart = () => {
               <div className="flex justify-between text-sm">
                 <span>Subtotal</span>
                 <span className="text-lg">GH₵ {subtotal.toFixed(2)}</span>
+                {/* <span className="text-lg">GH₵ </span> */}
               </div>
               <div className="flex justify-between text-sm">
                 <span>Delivery Fee</span>
                 <span>₵{deliveryFee.toFixed(2)}</span>
+                <span>₵</span>
               </div>
               <div className="border-t pt-2 flex justify-between font-semibold">
                 <span>Total</span>
                 <span>GH₵ {total.toFixed(2)}</span>
+                {/* <span>GH₵ </span> */}
               </div>
               <Link to={"/userdashboard"}>
                 <button className="w-full bg-black text-white py-2 rounded-xl hover:bg-gray-800 cursor-pointer">

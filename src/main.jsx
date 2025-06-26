@@ -13,6 +13,7 @@ import OrderHistory from "./pages/OrderHistory.jsx";
 import UserDashboard from "./pages/UserDashboard.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { CartProvider } from "./context/cartContext.jsx";
 
 const router = createBrowserRouter([
   {
@@ -63,7 +64,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
-      <RouterProvider router={router} />
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
     </GoogleOAuthProvider>
   </StrictMode>
 );
