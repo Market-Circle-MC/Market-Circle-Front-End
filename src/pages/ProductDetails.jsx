@@ -62,7 +62,7 @@ export default function ProductDetails() {
     return <div className="text-center py-8">Product not found</div>;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-4 pb-8 pt-28">
       <section className="flex flex-col md:flex-row gap-8">
         <section className="md:w-1/2 flex gap-4">
           <div className="flex flex-col gap-2 w-20">

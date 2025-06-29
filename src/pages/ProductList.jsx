@@ -7,25 +7,34 @@ import { CartContext } from "../context/cartContext";
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
-  const baseUrl = "https://fakestoreapi.com/";
-  const endpoint = "/products";
+  const baseUrl = "https://fair-bat-perfectly.ngrok-free.app/";
+  const endpoint = "api/products";
 
   const { addToCart } = useContext(CartContext);
 
   const url = baseUrl + endpoint;
 
+  const apiHeaders = {
+    Accept: "application/json",
+    "ngrok-skip-browser-warning": "23456",
+  };
+
   async function fetchAllProduct() {
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      headers: {
+        ...apiHeaders,
+      },
+    });
     if (response.status === 200) {
       const responseData = await response.json();
-      setProducts(responseData.slice(0, 10));
+      setProducts(responseData.data.data);
     }
   }
   useEffect(() => {
     fetchAllProduct();
   }, []);
   return (
-    <section className="px-28 mb-10">
+    <section className="px-28 mb-10 pt-28">
       <Categories />
       <div className="flex gap-1 items-center">
         <h3 className="text-gray-400">Home</h3>
@@ -125,18 +134,22 @@ export default function ProductList() {
           </div>
 
           <section className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center pt-5 gap-3">
-            {products.map((product, index) => (
-              <ProductCard
-                id={product.id}
-                image={product.image}
-                key={index}
-                title={product.title}
-                price={product.price}
-                oldPrice={product.oldPrice || 200}
-                discount={product.discount || 30}
-                addToCart={() => addToCart(product)}
-              />
-            ))}
+            {products.length > 0 ? (
+              products.map((product, index) => (
+                <ProductCard
+                  id={product.id}
+                  image={product.main_image_url}
+                  key={index}
+                  title={product.name}
+                  price={product.discount_price}
+                  oldPrice={product.current_price}
+                  discount={product.discount_percentage}
+                  addToCart={() => addToCart(product)}
+                />
+              ))
+            ) : (
+              <span>No product avilable</span>
+            )}
           </section>
           <div className="flex justify-between gap-10 py-10">
             <span className="w-12 h-12 rounded-full cursor-pointer border border-gray-200 hover:bg-[#53b32d] hover:border-[#53b32d] flex items-center justify-center">

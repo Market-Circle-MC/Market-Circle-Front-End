@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext, use } from "react";
 import Button from "./Button";
+import { CartContext } from "../context/cartContext";
 
 const ProductCard = ({
   id,
@@ -12,10 +13,10 @@ const ProductCard = ({
   addToCart,
 }) => {
   // const [isAdding, setIsAdding] = useState(false);
-
+  const { cart } = useContext(CartContext);
   // const addToCart = async () => {
   //   setIsAdding(true);
-
+  const isProductInCart = cart.some((value) => value.id === id);
   // try {
   //   const cartData = {
   //     id: 1,
@@ -55,19 +56,22 @@ const ProductCard = ({
   // };
 
   return (
-    <div className="max-w-sm border border-gray-200 shadow-sm w-66x rounded-2xl gap-5 bg-white flex flex-col justify-between relative group hover:shadow-xl transition-all duration-300">
-      <div className="max-h-60 h-60 flex items-center justify-center">
-        {discount && (
+    <div className="max-w-sm border border-gray-200 shadow-sm w-66x rounded-2xl gap-5 bg-white flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
+      <div className="max-h-60 h-60 flex justify-centers relative">
+        {discount ? (
           <div className="absolute top-3 bg-red-100 text-red-600 left-3 text-xs font-bold px-2 py-1 rounded">
             {discount}% OFF
           </div>
+        ) : (
+          ""
         )}
 
-        <a
-          href={`/product-details/${id}`}
-          className="flex items-center justify-center"
-        >
-          <img src={image} alt="Product" className="w-30 rounded-xl" />
+        <a href={`/product-details/${id}`}>
+          <img
+            src={image}
+            alt="Product"
+            className="w-full object-cover rounded-tl-xl rounded-tr-xl"
+          />
         </a>
       </div>
       <div className="flex flex-col gap-1 px-4 py-1">
@@ -77,19 +81,25 @@ const ProductCard = ({
         <div className="flex justify-between items-center">
           <div className="flex flex-col items-centers gap-1">
             <span className="text-lg font-semibold text-green-600">
-              GHS {price}
+              GHS {price ? price : oldPrice}
             </span>
-            <span className="text-sm font-semibold line-through text-gray-400">
-              GHS {oldPrice}
-            </span>
+            {price ? (
+              <span className="text-sm font-semibold line-through text-gray-400">
+                GHS {oldPrice}
+              </span>
+            ) : (
+              ""
+            )}
           </div>
           <Button
             className={`max-w-full w-16 h-8 ${
-              isAdding ? "bg-gray-300" : "bg-[#f3f9fb] hover:bg-[#53b32d]"
+              isProductInCart
+                ? "bg-gray-300 text-white"
+                : "bg-[#f3f9fb] hover:bg-[#53b32d]"
             } hover:text-white cursor-pointer text-[#53b32d] border border-[#afb0b1] font-medium rounded-sm transition duration-200`}
-            label={isAdding ? "..." : "ADD"}
+            label={isProductInCart ? "Added" : "ADD"}
             onClick={addToCart}
-            disabled={isAdding}
+            disabled={isProductInCart}
           />
         </div>
       </div>
