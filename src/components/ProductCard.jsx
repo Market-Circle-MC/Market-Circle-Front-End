@@ -1,4 +1,4 @@
-import React, { useState, useContext, use } from "react";
+import React, { useState, useContext } from "react";
 import Button from "./Button";
 import { CartContext } from "../context/cartContext";
 
@@ -9,7 +9,6 @@ const ProductCard = ({
   price,
   oldPrice,
   discount,
-  isAdding,
   addToCart,
 }) => {
   // const [isAdding, setIsAdding] = useState(false);

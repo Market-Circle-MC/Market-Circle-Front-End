@@ -1,8 +1,19 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import React from "react";
 import { useContext } from "react";
 import { CartContext } from "../../context/cartContext";
+import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { ArchiveBox, Heart } from "iconsax-react";
 
 const Navigation = () => {
+  const [showStatusBar, setShowStatusBar] = React.useState(true);
   const { cart, setCart } = useContext(CartContext);
 
   return (
@@ -29,9 +40,9 @@ const Navigation = () => {
                 />
               </svg>
 
-              <h1 className="text-[#53b32d] shadow-md ">Market</h1>
+              <h1 className="text-[#53b32d] ">Market</h1>
             </span>
-            <h1 className="text-yellow-400 shadow-md">Circle</h1>
+            <h1 className="text-yellow-400">Circle</h1>
           </NavLink>
         </section>
         <section>
@@ -56,18 +67,15 @@ const Navigation = () => {
             />
           </div>
         </section>
-        <section className="flex gap-4">
-          <NavLink
-            to="/login"
-            className=" pointer text-[#797979] flex gap-1 items-center"
-          >
+        <section className="flex gap-4 items-center">
+          <NavLink className=" pointer w-32 cursor-pointer  bg-gray-200 rounded-md text-gray-600 flex gap-2 px-2 py-1 items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="size-5 stroke-[#91cd79]"
+              className="size-6 stroke-[#1b1c1b]"
             >
               <path
                 strokeLinecap="round"
@@ -76,7 +84,64 @@ const Navigation = () => {
               />
             </svg>
 
-            <h3>Login</h3>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button className="p-0 cursor-pointer text-lg bg-transparent text-gray-600 hover:bg-bg-transparent outline-0">
+                  {" "}
+                  Account
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56 bg-white  cursor-pointer  border-gray-50 ">
+                <DropdownMenuItem className="  cursor-pointer p-2 text-white  flex items-center justify-center ">
+                  <Link to="/login">
+                    <Button className="p-4 cursor-pointer bg-green-600 w-50 hover:bg-green-700 text-lg h-12 shadow-md">
+                      Sign In
+                    </Button>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="border-[0.5px] h-[1px] border-gray-200" />
+
+                <DropdownMenuItem className=" cursor-pointer p-0  flex ">
+                  <Link to={"/userdashboard"}>
+                    <Button className="bg-transparent hover:bg-transprent text-gray-400 cursor-pointer shadow-none">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-5 stroke-[#91cd79]"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                        />
+                      </svg>{" "}
+                      My Account
+                    </Button>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className=" cursor-pointer p-0 flex "
+                  checked={showStatusBar}
+                  onCheckedChange={setShowStatusBar}
+                >
+                  <Button className="bg-transparent hover:bg-transparent text-gray-400 cursor-pointer shadow-none">
+                    <ArchiveBox size="32" color="#91cd79" /> Orders
+                  </Button>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className=" cursor-pointer p-0  flex "
+                  checked={showStatusBar}
+                  onCheckedChange={setShowStatusBar}
+                >
+                  <Button className="bg-transparent hover:bg-transparent text-gray-400 shadow-none">
+                    <Heart size="32" color="#91cd79" /> Wishlist
+                  </Button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </NavLink>
           <span className=" text-[#dfdfdf] h-6 bg[#dfdfdf] border border-[#dfdfdf]"></span>
           <NavLink

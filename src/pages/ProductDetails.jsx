@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { Minus, Add } from "iconsax-react";
+import { CartContext } from "../context/cartContext";
 
 export default function ProductDetails() {
   const path = useLocation();
@@ -12,23 +13,30 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
 
-  const baseUrl = "https://fakestoreapi.com/";
-  const endpoint = "products";
+  const { addToCart, cart } = useContext(CartContext);
+
+  const baseUrl = "https://fair-bat-perfectly.ngrok-free.app/";
+  const endpoint = "api/products";
   const url = baseUrl + endpoint;
 
-  // Generate 3 thumbnails
-  const thumbnails = product.image
-    ? [product.image, product.image, product.image]
-    : [];
+  const apiHeaders = {
+    Accept: "application/json",
+    "ngrok-skip-browser-warning": "23456",
+  };
 
+  console.log("Product ID:", product_id);
   async function fetchProduct() {
     setLoading(true);
     try {
-      const response = await fetch(url + "/" + product_id);
+      const response = await fetch(url + "/" + product_id, {
+        headers: {
+          ...apiHeaders,
+        },
+      });
       if (response.status === 200) {
         const responseData = await response.json();
-        setProduct(responseData);
-        setSelectedImage(responseData.image);
+        setProduct(responseData.data);
+        setSelectedImage(responseData.data.main_image_url);
       }
     } catch (error) {
       console.error("Error fetching product:", error);
@@ -37,10 +45,7 @@ export default function ProductDetails() {
     }
   }
 
-  const handleAddToCart = () => {
-    console.log("Added to cart:", product, "Quantity:", quantity);
-    alert(`${quantity} ${product.title}(s) added to cart!`);
-  };
+  const isProductInCart = cart.some((value) => value.id === product_id);
 
   const increaseQuantity = () => {
     setQuantity((prev) => prev + 1);
@@ -66,16 +71,16 @@ export default function ProductDetails() {
       <section className="flex flex-col md:flex-row gap-8">
         <section className="md:w-1/2 flex gap-4">
           <div className="flex flex-col gap-2 w-20">
-            {thumbnails.map((thumb, index) => (
+            {product.images.map((thumb, index) => (
               <div
                 key={index}
                 className={`w-full aspect-square border rounded-md overflow-hidden cursor-pointer hover:border-green-500 ${
-                  selectedImage === thumb ? "border-green-500" : ""
+                  selectedImage === thumb.image_url ? "border-green-500" : ""
                 }`}
-                onClick={() => setSelectedImage(thumb)}
+                onClick={() => setSelectedImage(thumb.image_url)}
               >
                 <img
-                  src={thumb}
+                  src={thumb.image_url || "https://via.placeholder.com/100"}
                   alt={`Thumbnail ${index + 1}`}
                   className="w-full h-full object-cover"
                   onError={(e) =>
@@ -87,7 +92,7 @@ export default function ProductDetails() {
           </div>
           <div className="flex-1 rounded-lg overflow-hidden bg-white p-4">
             <img
-              src={selectedImage || product.image}
+              src={selectedImage}
               alt={product.title}
               className="w-full h-auto object-contain max-h-96 mx-auto"
               onError={(e) =>
@@ -99,23 +104,23 @@ export default function ProductDetails() {
 
         <section className="md:w-1/2">
           <header className="mb-4">
-            <h1 className="text-2xl font-bold">{product.title}</h1>
+            <h1 className="text-2xl font-bold">{product.name}</h1>
             <div className="text-sm text-gray-500 capitalize">
-              {product.category}
+              {product.category.name}
             </div>
           </header>
 
           <section className="mb-6">
-            <p className="text-gray-700">{product.description}</p>
+            <p className="text-gray-700">{product.short_description}</p>
           </section>
 
           <section className="border-t border-b border-gray-200 py-4 my-4">
             <div className="flex items-center gap-4 mb-4">
               <span className="text-2xl font-bold text-green-600">
-                GH₵ {(product.price * 0.6).toFixed(2)}
+                GHS₵ {(product.current_price * 0.6).toFixed(2)}
               </span>
               <span className="text-lg text-gray-500 line-through">
-                GH₵ {product.price}
+                GHS₵ {product.discount_price}
               </span>
               <span className=" bg-red-100 text-red-600 left-3 text-xs font-bold px-2 py-1 rounded">
                 40% OFF
@@ -151,15 +156,18 @@ export default function ProductDetails() {
                   <tr className="text-center">
                     <td className="text-left flex gap-10 font-medium">
                       <button
-                        onClick={handleAddToCart}
-                        className="hover:bg-green-700 w-32 cursor-pointer border border-[#53b32d] bg-[#53b32d] h-10 text-white font-medium rounded"
+                        disabled={isProductInCart}
+                        onClick={() => addToCart(product)}
+                        className={`hover:bg-green-700 ${
+                          isProductInCart ? "bg-gray-300 text-black" : ""
+                        }  w-32 cursor-pointer border border-[#53b32d] bg-[#53b32d] h-10 text-white font-medium rounded`}
                       >
                         Add to cart
                       </button>
 
                       <button
                         className="bg-black hover:bg-gray-800 cursor-pointer text-white font-medium py-1 px-3 rounded h-10 w-32"
-                        onClick={handleAddToCart}
+                        onClick={() => addToCart(product)}
                       >
                         Buy Now
                       </button>
@@ -225,13 +233,6 @@ export default function ProductDetails() {
           {activeTab === "description" ? (
             <>
               <p className="mb-4">{product.description}</p>
-              <p>
-                Morbi ut sapien vitae odio accumsan gravida. Morbi vitae erat
-                auctor, elefend nunc a, lobortis neque. Praesent aliquam
-                dignissim viverra. Maeconas lacus odio, feugiat eu nunc sit
-                amet, maximus sagittis dolor. Vivamus nisi sapien, elementum sit
-                amet eros sit amet, ultricies cursus ipsum.
-              </p>
             </>
           ) : (
             <div className="py-4">

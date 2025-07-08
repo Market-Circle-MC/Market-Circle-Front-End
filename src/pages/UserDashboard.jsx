@@ -124,22 +124,7 @@ const UserDashboard = () => {
   // ... (keep your DeliveryStatus component and other existing code)
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold text-green-600">My Account</h1>
-          <div className="flex items-center space-x-4">
-            <button className="p-2 text-gray-600 hover:text-green-600">
-              <Message size="20" />
-            </button>
-            <button className="p-2 text-gray-600 hover:text-green-600">
-              <Setting size="20" />
-            </button>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen pt-28 bg-gray-100">
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row gap-6">
@@ -241,7 +226,7 @@ const UserDashboard = () => {
                         Full Name
                       </label>
                       <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <div className="absolute inset-y-0 left-0  flex items-center pointer-events-none">
                           <User size="18" className="text-gray-400" />
                         </div>
                         <input
@@ -249,7 +234,7 @@ const UserDashboard = () => {
                           name="name"
                           value={tempUserData.name}
                           onChange={handleInputChange}
-                          className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                          className=" w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                         />
                       </div>
                     </div>
@@ -267,7 +252,7 @@ const UserDashboard = () => {
                           name="email"
                           value={tempUserData.email}
                           onChange={handleInputChange}
-                          className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                          className=" w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                         />
                       </div>
                     </div>
@@ -285,7 +270,7 @@ const UserDashboard = () => {
                           name="phone"
                           value={tempUserData.phone}
                           onChange={handleInputChange}
-                          className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                          className=" w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                         />
                       </div>
                     </div>
@@ -309,7 +294,7 @@ const UserDashboard = () => {
                               name="currentPassword"
                               value={passwordData.currentPassword}
                               onChange={handlePasswordChange}
-                              className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                              className=" w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                               placeholder="Enter current password"
                             />
                           </div>
@@ -328,7 +313,7 @@ const UserDashboard = () => {
                               name="newPassword"
                               value={passwordData.newPassword}
                               onChange={handlePasswordChange}
-                              className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                              className=" w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                               placeholder="At least 8 characters"
                             />
                           </div>
@@ -347,7 +332,7 @@ const UserDashboard = () => {
                               name="confirmPassword"
                               value={passwordData.confirmPassword}
                               onChange={handlePasswordChange}
-                              className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                              className=" w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                               placeholder="Confirm new password"
                             />
                           </div>

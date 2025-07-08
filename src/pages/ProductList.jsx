@@ -7,12 +7,17 @@ import { CartContext } from "../context/cartContext";
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
-  const baseUrl = "https://fair-bat-perfectly.ngrok-free.app/";
-  const endpoint = "api/products";
+  const [subcategories, setSubCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const baseUrl = "https://fair-bat-perfectly.ngrok-free.app/api/";
+  const endpoint = "products";
+
+  const filtersByCategory = "categories";
 
   const { addToCart } = useContext(CartContext);
 
-  const url = baseUrl + endpoint;
+  let url = baseUrl + endpoint;
+  const categoryUrl = baseUrl + filtersByCategory;
 
   const apiHeaders = {
     Accept: "application/json",
@@ -20,6 +25,9 @@ export default function ProductList() {
   };
 
   async function fetchAllProduct() {
+    if (selectedCategory) {
+      url = `${url}?category=${selectedCategory}`;
+    }
     const response = await fetch(url, {
       headers: {
         ...apiHeaders,
@@ -30,9 +38,37 @@ export default function ProductList() {
       setProducts(responseData.data.data);
     }
   }
+
+  async function fetchAllCategoryList() {
+    const response = await fetch(categoryUrl, {
+      headers: {
+        ...apiHeaders,
+      },
+    });
+    if (response.status === 200) {
+      const responseData = await response.json();
+      console.log(responseData.data);
+      const categories = responseData.data;
+
+      if (categories.length > 0) {
+        const childrenList = categories
+          .map((category) => category.children)
+          .flat();
+        console.log(childrenList);
+        setSubCategories(childrenList);
+        // setProducts(responseData.data.data);
+      }
+    }
+  }
+
+  useEffect(() => {
+    fetchAllCategoryList();
+  }, []);
+
   useEffect(() => {
     fetchAllProduct();
-  }, []);
+  }, [selectedCategory]);
+
   return (
     <section className="px-28 mb-10 pt-28">
       <Categories />
@@ -95,10 +131,19 @@ export default function ProductList() {
             <section className="flex flex-col gap-4 font-sans">
               <h3 className="font-semibold text-lg">Proudct Categories</h3>
               <div className="space-y-3 font-medium  text-sm">
-                {CATEGORIES.map((category, index) => (
+                {subcategories.map((category, index) => (
                   <div key={index} className="flex gap-2 items-center">
-                    <input className="w-4 h-4" type="checkbox" />
-                    <h4>{category.title} </h4>
+                    <input
+                      className="w-4 h-4"
+                      type="radio"
+                      name="category"
+                      id={category.slug}
+                      value={category.slug}
+                      onChange={(event) =>
+                        setSelectedCategory(event.target.value)
+                      }
+                    />
+                    <h4>{category.name} </h4>
                   </div>
                 ))}
               </div>

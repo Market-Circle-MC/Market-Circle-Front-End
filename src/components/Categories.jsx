@@ -29,7 +29,7 @@ export default function Categories() {
   }, []);
 
   return (
-    <main>
+    <main className="">
       <div className="py-4 flex gap-4 justify-center">
         {cartegories.map((category, index) => (
           <button

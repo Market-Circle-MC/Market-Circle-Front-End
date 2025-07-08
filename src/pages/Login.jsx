@@ -51,8 +51,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center gap-16 min-h-screen bg-gray-100">
-      <div className="w-[600px] relative z-50">
+    <div className="flex items-center pt-28 z-10 justify-center gap-16 min-h-screen bg-gray-100">
+      <div className="w-[600px] relative z-0">
         <div className="w-[450px] absolute bottom-0 z-0 right-24 h-80 rounded-full bg-amber-200/15"></div>
         <img src={CARTTS} alt="" className="z-50 shadow-amber-600 relative" />
       </div>
