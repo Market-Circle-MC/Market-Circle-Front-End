@@ -3,14 +3,21 @@ import { createContext, useState, useEffect } from "react";
 const CartContext = createContext({});
 
 const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(
+    JSON.parse(localStorage.getItem("cart")) || []
+  );
+  const [isLoading, setIsLoading] = useState(false);
+
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
 
   const addToCart = (product) => {
     // setIsAdding(true);
-    product.quantity = 1;
-    setCart((prev) => [...prev, product]);
+    setIsLoading(true);
+
+    setCart((prevItems) => [...prevItems, { ...product, quantity: 1 }]);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    setIsLoading(false);
   };
 
   const handleRemove = (id) => {
@@ -48,7 +55,8 @@ const CartProvider = ({ children }) => {
   // };
 
   useEffect(() => {
-    console.table(cart);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    console.table("Cart:", cart);
     const sbt = cart.reduce(
       (acc, item) => acc + item.current_price * item.quantity,
       0
@@ -56,6 +64,7 @@ const CartProvider = ({ children }) => {
     const tot = subtotal + deliveryFee;
     setTotal(tot);
     setSubtotal(sbt);
+    setIsLoading(false);
   }, [cart]);
 
   return (
@@ -70,6 +79,7 @@ const CartProvider = ({ children }) => {
         subtotal,
         deliveryFee,
         total,
+        isLoading,
       }}
     >
       {children}

@@ -5,6 +5,8 @@ import { ArrowRight2 } from "iconsax-react";
 import Categories from "../components/Categories";
 import { CartContext } from "../context/cartContext";
 import { Link } from "react-router-dom";
+import { apiUrl } from "@/constants";
+import Loader from "@/components/Loarder";
 
 export default function Home() {
   const { addToCart } = useContext(CartContext);
@@ -17,9 +19,7 @@ export default function Home() {
   //   // setIsAdding(true);
   //   setCart((prev) => [...prev, product]);
   // };
-  console.log(import.meta.env.VITE_BASE_UR);
   // const method = "GET";
-  const baseUrl = "https://fair-bat-perfectly.ngrok-free.app/";
   const endpoint = "api/categories";
 
   const productendpoint = "api/products";
@@ -30,7 +30,7 @@ export default function Home() {
   };
 
   async function fetchAllProduct(slug) {
-    const productUrl = baseUrl + productendpoint;
+    const productUrl = apiUrl + productendpoint;
     const url = `${productUrl}?category=${slug}`;
     const response = await fetch(url, {
       headers: {
@@ -46,7 +46,7 @@ export default function Home() {
     return [];
   }
 
-  const url = baseUrl + endpoint;
+  const url = apiUrl + endpoint;
 
   // const fetchAllCategories = async () => {
   //   const response = await fetch(url, {
@@ -129,39 +129,12 @@ export default function Home() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <div className="flex flex-row p-4 text-4xl font-extrabold">
-          <span className="relative">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6 absolute -top-1 right-14 stroke-yellow-400"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-              />
-            </svg>
-
-            <h1 className="text-[#53b32d] ">Market</h1>
-          </span>
-          <h1 className="text-yellow-400">Circle</h1>
-        </div>
-        <span className="text-2xl font-extralight mt-4">
-          Fetching products...
-        </span>
-      </div>
-    );
+    return <Loader />;
   }
 
   return (
     <div className="pt-28">
-      <section className="">
+      <section className="px-28 ">
         <Categories />
       </section>
       <HeroBanner />
@@ -177,9 +150,7 @@ export default function Home() {
                   <div className="mt-4 border-b  py-0 border-b-gray-300 flex item-center justify-between">
                     <h2 className="text-3xl font-extralight border-b-3 border-b-[#53b32d] inline py-3 m-0">
                       Shop From{" "}
-                      <span className="text-[#53b32d]">
-                        {productCategory}--
-                      </span>
+                      <span className="text-[#53b32d]">{productCategory}</span>
                     </h2>
                     <Link
                       to="/product-list/bath-and-body"

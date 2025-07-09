@@ -1,23 +1,25 @@
 import Categories from "../components/Categories";
 import { ArrowRight2, Category, ArrowLeft2 } from "iconsax-react";
 import { useEffect, useState, useContext } from "react";
-import { CATEGORIES } from "../constants";
+import { apiUrl } from "../constants";
 import ProductCard from "../components/ProductCard";
 import { CartContext } from "../context/cartContext";
+import Loader from "../components/Loarder";
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
   const [subcategories, setSubCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const baseUrl = "https://fair-bat-perfectly.ngrok-free.app/api/";
-  const endpoint = "products";
+  const endpoint = "api/products";
 
-  const filtersByCategory = "categories";
+  const [isLoading, setIsLoading] = useState(false);
+
+  const filtersByCategory = "api/categories";
 
   const { addToCart } = useContext(CartContext);
 
-  let url = baseUrl + endpoint;
-  const categoryUrl = baseUrl + filtersByCategory;
+  let url = apiUrl + endpoint;
+  const categoryUrl = apiUrl + filtersByCategory;
 
   const apiHeaders = {
     Accept: "application/json",
@@ -25,6 +27,7 @@ export default function ProductList() {
   };
 
   async function fetchAllProduct() {
+    setIsLoading(true);
     if (selectedCategory) {
       url = `${url}?category=${selectedCategory}`;
     }
@@ -34,6 +37,7 @@ export default function ProductList() {
       },
     });
     if (response.status === 200) {
+      setIsLoading(false);
       const responseData = await response.json();
       setProducts(responseData.data.data);
     }
@@ -45,6 +49,7 @@ export default function ProductList() {
         ...apiHeaders,
       },
     });
+    console.log(response);
     if (response.status === 200) {
       const responseData = await response.json();
       console.log(responseData.data);
@@ -133,17 +138,19 @@ export default function ProductList() {
               <div className="space-y-3 font-medium  text-sm">
                 {subcategories.map((category, index) => (
                   <div key={index} className="flex gap-2 items-center">
-                    <input
-                      className="w-4 h-4"
-                      type="radio"
-                      name="category"
-                      id={category.slug}
-                      value={category.slug}
-                      onChange={(event) =>
-                        setSelectedCategory(event.target.value)
-                      }
-                    />
-                    <h4>{category.name} </h4>
+                    <label className="flex gap-2 items-center">
+                      <input
+                        className="w-4 h-4"
+                        type="radio"
+                        name="checkbox"
+                        id={category.slug}
+                        value={category.slug}
+                        onChange={(event) =>
+                          setSelectedCategory(event.target.value)
+                        }
+                      />
+                      <h4>{category.name} </h4>
+                    </label>
                   </div>
                 ))}
               </div>
@@ -177,8 +184,12 @@ export default function ProductList() {
               </div>
             </div>
           </div>
-
-          <section className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center pt-5 gap-3">
+          {isLoading && (
+            <div>
+              <Loader />
+            </div>
+          )}
+          <section className="grid relative grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center items-center pt-5 gap-3">
             {products.length > 0 ? (
               products.map((product, index) => (
                 <ProductCard
@@ -193,7 +204,11 @@ export default function ProductList() {
                 />
               ))
             ) : (
-              <span>No product avilable</span>
+              <div className=" absolute w-full h-96 grid left-[500px] top-48 -translate-y-1/2 -translate-x-1/2 items-center justify-center">
+                <span className="text-2xl text-gray-400">
+                  No product available
+                </span>
+              </div>
             )}
           </section>
           <div className="flex justify-between gap-10 py-10">

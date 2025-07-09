@@ -10,6 +10,7 @@ import {
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { CartContext } from "../context/cartContext";
+import Loader from "@/components/Loarder";
 
 const Cart = () => {
   const {
@@ -20,8 +21,16 @@ const Cart = () => {
     subtotal,
     total,
     deliveryFee,
+    isLoading,
   } = useContext(CartContext);
 
+  if (isLoading) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <Loader />
+      </div>
+    );
+  }
   return (
     <div className="max-w-5xls w-full px-36 flex pt-28 flex-col justify-between p-4">
       <h1 className="text-3xl font-bold mb-6">

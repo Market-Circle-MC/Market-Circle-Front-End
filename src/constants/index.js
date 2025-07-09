@@ -7,7 +7,7 @@ import FULLCART from "../assets/images/fullcart.jpeg";
 import GROCERY from "../assets/images/grocery.png";
 import CARTS from "../assets/images/carts.png";
 import CARTTS from "../assets/images/Cartt.png";
-
+const apiUrl = import.meta.env.VITE_BASE_URL;
 const CATEGORIES = [
   {
     title: "Fruits & Vegetables",
@@ -62,4 +62,5 @@ export {
   GROCERY,
   CARTS,
   CARTTS,
+  apiUrl,
 };

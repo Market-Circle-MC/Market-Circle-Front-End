@@ -2,6 +2,8 @@ import { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { Minus, Add } from "iconsax-react";
 import { CartContext } from "../context/cartContext";
+import { apiUrl } from "../constants";
+import Loader from "../components/Loarder";
 
 export default function ProductDetails() {
   const path = useLocation();
@@ -15,9 +17,8 @@ export default function ProductDetails() {
 
   const { addToCart, cart } = useContext(CartContext);
 
-  const baseUrl = "https://fair-bat-perfectly.ngrok-free.app/";
   const endpoint = "api/products";
-  const url = baseUrl + endpoint;
+  const url = apiUrl + endpoint;
 
   const apiHeaders = {
     Accept: "application/json",
@@ -62,7 +63,11 @@ export default function ProductDetails() {
   }, [product_id]);
 
   if (loading)
-    return <div className="text-center py-8">Loading product...</div>;
+    return (
+      <div className="text-center py-8">
+        <Loader />
+      </div>
+    );
   if (!product || !product.id)
     return <div className="text-center py-8">Product not found</div>;
 
