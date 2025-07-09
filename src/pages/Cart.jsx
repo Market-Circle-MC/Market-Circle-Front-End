@@ -22,6 +22,7 @@ const Cart = () => {
     total,
     deliveryFee,
     isLoading,
+    clearCart,
   } = useContext(CartContext);
 
   if (isLoading) {
@@ -42,6 +43,17 @@ const Cart = () => {
           <div className="flex gap-3 max-w-full">
             {/* Cart Items */}
             <div className="flex-1 space-y-1 max-h-2/4 h-[700px] relative overflow-y-scroll">
+              {/* Clear Cart Button - Right Size */}
+              <div className="w-full flex justify-end mb-2">
+                <button
+                  onClick={clearCart}
+                  className="bg-red-400 hover:bg-red-600 text-white py-2  text-sm px-4 rounded-md flex items-center justify-center gap-2 transition-colors"
+                >
+                  <Trash size="16" className="stroke-white" />
+                  Clear Cart
+                </button>
+              </div>
+
               {cart.map((item) => (
                 <div
                   key={`${item.id}-${Math.random()}`}
@@ -70,6 +82,10 @@ const Cart = () => {
                     </div>
                     <div className="font-bold text-lg">
                       <div className="flex flex-col gap-1">
+                        {/* Unit Price Display - Exactly as you had it */}
+                        <span className="text-sm text-gray-700">
+                          GHS₵ {item.current_price.toFixed(2)} each
+                        </span>
                         <span>
                           GHS₵
                           {(item.discount_price
@@ -106,34 +122,29 @@ const Cart = () => {
                   </div>
                 </div>
               ))}
-              {cart.length >= 5 ? (
+              {cart.length >= 5 && (
                 <ArrowDown
                   className="absolute bottom-0 right-0 animate-bounce bg-amber-800 rounded-full p-2 shadow-md"
                   size="32"
                   color="#FF8A65"
                 />
-              ) : (
-                ""
               )}
             </div>
-            <div className=" w-96 flex justify-center items-start">
+            <div className="w-96 flex justify-center items-start">
               {/* Summary */}
               <div className="bg-white rounded-xl p-4 shadow space-y-4 w-full h-auto">
-                <h2 className="text-xl font-bold"> Cart Summary</h2>
+                <h2 className="text-xl font-bold">Cart Summary</h2>
                 <div className="flex justify-between text-sm">
                   <span>Subtotal</span>
-                  <span className="text-lg">GH₵ {subtotal.toFixed(2)}</span>
-                  {/* <span className="text-lg">GH₵ </span> */}
+                  <span className="text-lg">GHS₵ {subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Delivery Fee</span>
-                  <span>₵{deliveryFee.toFixed(2)}</span>
-                  <span>₵ {deliveryFee.toFixed(2)}</span>
+                  <span>GHS₵ {deliveryFee.toFixed(2)}</span>
                 </div>
                 <div className="border-t pt-2 flex justify-between font-semibold">
                   <span>Total</span>
-                  <span>GH₵ {total.toFixed(2)}</span>
-                  {/* <span>GH₵ </span> */}
+                  <span>GHS₵ {total.toFixed(2)}</span>
                 </div>
                 <Link to={"/checkout"}>
                   <button className="w-full bg-black text-white py-2 rounded-xl hover:bg-gray-800 cursor-pointer">
@@ -143,12 +154,10 @@ const Cart = () => {
               </div>
             </div>
           </div>
-          {cart.length >= 5 ? (
+          {cart.length >= 5 && (
             <span className="mt-1 text-gray-500">
               Scroll down to see more items
             </span>
-          ) : (
-            ""
           )}
         </div>
       ) : (

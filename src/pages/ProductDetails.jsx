@@ -46,7 +46,7 @@ export default function ProductDetails() {
     }
   }
 
-  const isProductInCart = cart.some((value) => value.id === product_id);
+  const isProductInCart = cart.some((value) => value.id === product.id);
 
   const increaseQuantity = () => {
     setQuantity((prev) => prev + 1);
@@ -161,17 +161,19 @@ export default function ProductDetails() {
                   <tr className="text-center">
                     <td className="text-left flex gap-10 font-medium">
                       <button
+                        onClick={() => !isProductInCart && addToCart(product)}
+                        className={`max-w-full w-16 h-8 ${
+                          isProductInCart
+                            ? "bg-gray-300 text-gray-500 cursor-not-allowed border-gray-300"
+                            : "bg-[#f3f9fb] hover:bg-[#53b32d] hover:text-white text-[#53b32d] border-[#afb0b1]"
+                        } w-32 border font-medium rounded-sm transition h-10 duration-200`}
                         disabled={isProductInCart}
-                        onClick={() => addToCart(product)}
-                        className={`hover:bg-green-700 ${
-                          isProductInCart ? "bg-gray-300 text-black" : ""
-                        }  w-32 cursor-pointer border border-[#53b32d] bg-[#53b32d] h-10 text-white font-medium rounded`}
                       >
-                        Add to cart
+                        {isProductInCart ? "Added" : "Add to Cart"}
                       </button>
 
                       <button
-                        className="bg-black hover:bg-gray-800 cursor-pointer text-white font-medium py-1 px-3 rounded h-10 w-32"
+                        className="bg-black hover:bg-gray-800 cursor-pointer text-white font-medium rounded-sm h-10 w-32"
                         onClick={() => addToCart(product)}
                       >
                         Buy Now

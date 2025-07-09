@@ -36,7 +36,7 @@ const Login = () => {
         return;
       }
       console.log("Login with:", { email, phone, password });
-      navigate("/userdashboard");
+      navigate("/home");
     }
   };
 

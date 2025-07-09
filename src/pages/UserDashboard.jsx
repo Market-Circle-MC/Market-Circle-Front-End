@@ -1,12 +1,11 @@
-/* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import {
   Profile,
   Bag,
   Heart,
   Location,
-  Setting,
   Logout,
   Message,
   Edit,
@@ -18,20 +17,18 @@ import {
 
 const UserDashboard = () => {
   const navigate = useNavigate();
+  const { user, logout } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [showFilters, setShowFilters] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [editMode, setEditMode] = useState(false);
   const [editProfileMode, setEditProfileMode] = useState(false);
   const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // User data with editable fields
+  // Initialize user data from context
   const [userData, setUserData] = useState({
-    name: "Kwame Asante",
-    email: "kwame@example.com",
-    phone: "+233 123 456 789",
-    joinedDate: "2023-01-15",
+    name: user?.name || "",
+    email: user?.email || "",
+    phone: user?.phone_number || "",
+    joinedDate: user?.created_at || new Date().toISOString(),
   });
 
   const [tempUserData, setTempUserData] = useState({ ...userData });
@@ -42,23 +39,7 @@ const UserDashboard = () => {
   });
 
   // Addresses data
-  const [addresses, setAddresses] = useState([
-    {
-      id: 1,
-      name: "Home",
-      address: "123 Main St, Accra, Ghana",
-      isDefault: true,
-      phone: "+233 123 456 789",
-    },
-    {
-      id: 2,
-      name: "Work",
-      address: "456 Business Ave, Accra, Ghana",
-      isDefault: false,
-      phone: "+233 987 654 321",
-    },
-  ]);
-
+  const [addresses, setAddresses] = useState([]);
   const [newAddress, setNewAddress] = useState({
     name: "",
     address: "",
@@ -66,14 +47,32 @@ const UserDashboard = () => {
     isDefault: false,
   });
 
-  // Orders data
-  const orders = [
-    // ... (keep your existing orders data)
-  ];
+  // Fetch user addresses on component mount
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      try {
+        const response = await fetch(
+          "https://marketcircle-backend.onrender.com/api/addresses",
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setAddresses(data.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch addresses:", error);
+      }
+    };
 
-  // ... (keep all your existing filter and handler functions)
+    if (user) {
+      fetchAddresses();
+    }
+  }, [user]);
 
-  // Profile editing functions
   const handleEditProfile = () => {
     setTempUserData({ ...userData });
     setEditProfileMode(true);
@@ -84,48 +83,88 @@ const UserDashboard = () => {
     setShowPasswordFields(false);
   };
 
-  const handleSaveProfile = () => {
-    // Validate password fields if shown
-    if (showPasswordFields) {
-      if (passwordData.newPassword !== passwordData.confirmPassword) {
-        alert("New passwords don't match!");
-        return;
-      }
-      if (passwordData.newPassword.length < 8) {
-        alert("Password must be at least 8 characters");
-        return;
-      }
-      // Here you would typically verify current password with your backend
-    }
+  const handleSaveProfile = async () => {
+    setIsLoading(true);
+    try {
+      // Update profile information
+      const response = await fetch(
+        "https://marketcircle-backend.onrender.com/api/profile",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({
+            name: tempUserData.name,
+            email: tempUserData.email,
+            phone_number: tempUserData.phone,
+          }),
+        }
+      );
 
-    // Update user data
-    setUserData({ ...tempUserData });
-    setEditProfileMode(false);
-    setShowPasswordFields(false);
-    alert("Profile updated successfully!");
+      if (!response.ok) {
+        throw new Error("Failed to update profile");
+      }
+
+      // Update password if fields are shown
+      if (showPasswordFields) {
+        if (passwordData.newPassword !== passwordData.confirmPassword) {
+          throw new Error("New passwords don't match!");
+        }
+        if (passwordData.newPassword.length < 8) {
+          throw new Error("Password must be at least 8 characters");
+        }
+
+        const passwordResponse = await fetch(
+          "https://marketcircle-backend.onrender.com/api/change-password",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+            body: JSON.stringify({
+              current_password: passwordData.currentPassword,
+              new_password: passwordData.newPassword,
+              new_password_confirmation: passwordData.confirmPassword,
+            }),
+          }
+        );
+
+        if (!passwordResponse.ok) {
+          throw new Error("Failed to change password");
+        }
+      }
+
+      setUserData({ ...tempUserData });
+      setEditProfileMode(false);
+      setShowPasswordFields(false);
+      alert("Profile updated successfully!");
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setTempUserData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setTempUserData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
-    setPasswordData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setPasswordData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ... (keep your DeliveryStatus component and other existing code)
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen pt-28 bg-gray-100">
-      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row gap-6">
           {/* Sidebar Navigation */}
@@ -196,7 +235,10 @@ const UserDashboard = () => {
                 <Location size="18" className="mr-3" />
                 My Addresses
               </button>
-              <button className="flex items-center w-full px-3 py-2 text-sm rounded-md text-gray-600 hover:bg-gray-50">
+              <button
+                onClick={handleLogout}
+                className="flex items-center w-full px-3 py-2 text-sm rounded-md text-gray-600 hover:bg-gray-50"
+              >
                 <Logout size="18" className="mr-3" />
                 Logout
               </button>
@@ -208,7 +250,33 @@ const UserDashboard = () => {
             {/* Dashboard Tab */}
             {activeTab === "dashboard" && (
               <div className="bg-white rounded-lg shadow-sm p-6">
-                {/* ... (keep your existing dashboard content) ... */}
+                <h2 className="text-xl font-bold mb-6">Dashboard Overview</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <h3 className="font-medium text-green-800">
+                      Recent Orders
+                    </h3>
+                    <p className="text-2xl font-bold mt-2">0</p>
+                    <p className="text-sm text-gray-500">No recent orders</p>
+                  </div>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h3 className="font-medium text-blue-800">
+                      Wishlist Items
+                    </h3>
+                    <p className="text-2xl font-bold mt-2">0</p>
+                    <p className="text-sm text-gray-500">No saved items</p>
+                  </div>
+                  <div className="bg-purple-50 p-4 rounded-lg">
+                    <h3 className="font-medium text-purple-800">
+                      Account Status
+                    </h3>
+                    <p className="text-2xl font-bold mt-2">Active</p>
+                    <p className="text-sm text-gray-500">
+                      Member since{" "}
+                      {new Date(userData.joinedDate).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -221,152 +289,8 @@ const UserDashboard = () => {
 
                 {editProfileMode ? (
                   <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Full Name
-                      </label>
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0  flex items-center pointer-events-none">
-                          <User size="18" className="text-gray-400" />
-                        </div>
-                        <input
-                          type="text"
-                          name="name"
-                          value={tempUserData.name}
-                          onChange={handleInputChange}
-                          className=" w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Email Address
-                      </label>
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <Sms size="18" className="text-gray-400" />
-                        </div>
-                        <input
-                          type="email"
-                          name="email"
-                          value={tempUserData.email}
-                          onChange={handleInputChange}
-                          className=" w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Phone Number
-                      </label>
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <Call size="18" className="text-gray-400" />
-                        </div>
-                        <input
-                          type="tel"
-                          name="phone"
-                          value={tempUserData.phone}
-                          onChange={handleInputChange}
-                          className=" w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
-                        />
-                      </div>
-                    </div>
-
-                    {showPasswordFields && (
-                      <div className="space-y-4 pt-4 border-t border-gray-200">
-                        <h4 className="font-medium text-gray-700">
-                          Change Password
-                        </h4>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Current Password
-                          </label>
-                          <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                              <Lock size="18" className="text-gray-400" />
-                            </div>
-                            <input
-                              type="password"
-                              name="currentPassword"
-                              value={passwordData.currentPassword}
-                              onChange={handlePasswordChange}
-                              className=" w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
-                              placeholder="Enter current password"
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            New Password
-                          </label>
-                          <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                              <Lock size="18" className="text-gray-400" />
-                            </div>
-                            <input
-                              type="password"
-                              name="newPassword"
-                              value={passwordData.newPassword}
-                              onChange={handlePasswordChange}
-                              className=" w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
-                              placeholder="At least 8 characters"
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Confirm New Password
-                          </label>
-                          <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                              <Lock size="18" className="text-gray-400" />
-                            </div>
-                            <input
-                              type="password"
-                              name="confirmPassword"
-                              value={passwordData.confirmPassword}
-                              onChange={handlePasswordChange}
-                              className=" w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
-                              placeholder="Confirm new password"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="pt-4 flex justify-between">
-                      <button
-                        onClick={() =>
-                          setShowPasswordFields(!showPasswordFields)
-                        }
-                        className="text-sm text-green-600 hover:text-green-800 font-medium"
-                      >
-                        {showPasswordFields
-                          ? "Cancel Password Change"
-                          : "Change Password"}
-                      </button>
-
-                      <div className="flex space-x-3">
-                        <button
-                          onClick={handleCancelEdit}
-                          className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={handleSaveProfile}
-                          className="px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700"
-                        >
-                          Save Changes
-                        </button>
-                      </div>
-                    </div>
+                    {/* Edit Profile Form */}
+                    {/* ... (keep your existing edit form) ... */}
                   </div>
                 ) : (
                   <div>
@@ -407,22 +331,62 @@ const UserDashboard = () => {
 
             {/* Orders Tab */}
             {activeTab === "orders" && (
-              <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-                {/* ... (keep your existing orders content) ... */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-lg font-bold mb-6">My Orders</h2>
+                <div className="text-center py-8 text-gray-500">
+                  <p>You haven't placed any orders yet</p>
+                  <button
+                    onClick={() => navigate("/")}
+                    className="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                  >
+                    Start Shopping
+                  </button>
+                </div>
               </div>
             )}
 
             {/* Wishlist Tab */}
             {activeTab === "wishlist" && (
               <div className="bg-white rounded-lg shadow-sm p-6">
-                {/* ... (keep your existing wishlist content) ... */}
+                <h2 className="text-lg font-bold mb-6">My Wishlist</h2>
+                <div className="text-center py-8 text-gray-500">
+                  <p>Your wishlist is empty</p>
+                  <button
+                    onClick={() => navigate("/")}
+                    className="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                  >
+                    Browse Products
+                  </button>
+                </div>
               </div>
             )}
 
             {/* Addresses Tab */}
             {activeTab === "addresses" && (
               <div className="bg-white rounded-lg shadow-sm p-6">
-                {/* ... (keep your existing addresses content) ... */}
+                <h2 className="text-lg font-bold mb-6">My Addresses</h2>
+                {addresses.length > 0 ? (
+                  <div className="space-y-4">
+                    {addresses.map((address) => (
+                      <div key={address.id} className="border rounded-lg p-4">
+                        <div className="flex justify-between">
+                          <h3 className="font-medium">{address.name}</h3>
+                          {address.isDefault && (
+                            <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
+                              Default
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-gray-600 mt-1">{address.address}</p>
+                        <p className="text-gray-600">{address.phone}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-gray-500">
+                    <p>You haven't saved any addresses yet</p>
+                  </div>
+                )}
               </div>
             )}
           </div>

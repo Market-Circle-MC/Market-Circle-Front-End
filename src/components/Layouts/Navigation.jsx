@@ -21,7 +21,7 @@ const Navigation = () => {
       <main className="flex justify-between w-full items-center">
         <section className="">
           <NavLink
-            to={"/"}
+            to={"/home"}
             className="flex flex-row p-4 text-4xl font-extrabold"
           >
             <span className="relative">

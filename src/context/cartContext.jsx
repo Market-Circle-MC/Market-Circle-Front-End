@@ -11,12 +11,31 @@ const CartProvider = ({ children }) => {
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
 
+  // ADDED: Clear cart function
+  const clearCart = () => {
+    setCart([]);
+  };
+
   const addToCart = (product) => {
-    // setIsAdding(true);
     setIsLoading(true);
 
-    setCart((prevItems) => [...prevItems, { ...product, quantity: 1 }]);
-    localStorage.setItem("cart", JSON.stringify(cart));
+    // ADDED: Check if product already exists in cart
+    const existingItem = cart.find((item) => item.id === product.id);
+
+    if (existingItem) {
+      // If exists, increment quantity
+      setCart((prevItems) =>
+        prevItems.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      );
+    } else {
+      // If new, add with quantity = 1
+      setCart((prevItems) => [...prevItems, { ...product, quantity: 1 }]);
+    }
+
     setIsLoading(false);
   };
 
@@ -43,16 +62,7 @@ const CartProvider = ({ children }) => {
     );
   };
 
-  // const subtotalM = () => {
-  //   const sbt = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  //   setSubtotal(sbt);
-  // };
-
   const deliveryFee = 20;
-  // const totalM = () => {
-  //   const tot = subtotal + deliveryFee;
-  //   setTotal(tot);
-  // };
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -61,11 +71,14 @@ const CartProvider = ({ children }) => {
       (acc, item) => acc + item.current_price * item.quantity,
       0
     );
-    const tot = subtotal + deliveryFee;
+    const tot = sbt + deliveryFee; // CHANGED: Use sbt instead of subtotal to avoid dependency issues
     setTotal(tot);
     setSubtotal(sbt);
     setIsLoading(false);
   }, [cart]);
+
+  // ADDED: Calculate cart count
+  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <CartContext.Provider
@@ -80,6 +93,8 @@ const CartProvider = ({ children }) => {
         deliveryFee,
         total,
         isLoading,
+        clearCart, // ADDED
+        cartCount, // ADDED
       }}
     >
       {children}
