@@ -1,6 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import React from "react";
-import { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { CartContext } from "../../context/cartContext";
 import { Button } from "../ui/button";
 import {
@@ -11,10 +10,18 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { ArchiveBox, Heart } from "iconsax-react";
+import { AuthContext } from "@/context/AuthContext";
+import { apiUrl } from "@/constants";
 
 const Navigation = () => {
   const [showStatusBar, setShowStatusBar] = React.useState(true);
-  const { cart, setCart } = useContext(CartContext);
+  const { cart, searchQuery, setSearchQuery, cartData } =
+    useContext(CartContext);
+  const { user, logout } = useContext(AuthContext);
+
+  useEffect(() => {
+    console.log(cartData)
+  }, [])
 
   return (
     <nav className="px-32 h-24 flex items-center justify-between fixed w-full bg-white z-50">
@@ -64,11 +71,13 @@ const Navigation = () => {
               placeholder="Search..."
               className="w-80 focus:outline-0 text-md"
               type="text"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
             />
           </div>
         </section>
         <section className="flex gap-4 items-center">
-          <NavLink className=" pointer w-32 cursor-pointer  bg-gray-200 rounded-md text-gray-600 flex gap-2 px-2 py-1 items-center">
+          <NavLink className=" pointer w-full cursor-pointer  bg-gray-200 rounded-md text-gray-600 flex gap-2 px-3 py-1 items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -86,19 +95,36 @@ const Navigation = () => {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="p-0 cursor-pointer text-lg bg-transparent text-gray-600 hover:bg-bg-transparent outline-0">
-                  {" "}
-                  Account
-                </Button>
+                {user?.user ? (
+                  <div>
+                    <h1>Welcome {user?.user.name}</h1>
+                  </div>
+                ) : (
+                  <Button className="p-0 cursor-pointer text-lg bg-transparent text-gray-600 hover:bg-bg-transparent outline-0">
+                    {" "}
+                    Account
+                  </Button>
+                )}
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 bg-white  cursor-pointer  border-gray-50 ">
-                <DropdownMenuItem className="  cursor-pointer p-2 text-white  flex items-center justify-center ">
-                  <Link to="/login">
-                    <Button className="p-4 cursor-pointer bg-green-600 w-50 hover:bg-green-700 text-lg h-12 shadow-md">
-                      Sign In
-                    </Button>
-                  </Link>
-                </DropdownMenuItem>
+              <DropdownMenuContent className="w-56 bg-white  flex justify-center flex-col cursor-pointer  border-gray-50 ">
+                {user?.user ? (
+                  <div className="py-2 flex justify-center">
+                    <button
+                      onClick={logout}
+                      className=" w-full h-full text-gray-600 cursor-pointer"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <DropdownMenuItem className="  cursor-pointer p-2 text-white  flex items-center justify-center ">
+                    <Link to="/login">
+                      <Button className="p-4 cursor-pointer bg-green-600 w-50 hover:bg-green-700 text-lg h-12 shadow-md">
+                        Sign In
+                      </Button>
+                    </Link>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuSeparator className="border-[0.5px] h-[1px] border-gray-200" />
 
                 <DropdownMenuItem className=" cursor-pointer p-0  flex ">
@@ -164,9 +190,11 @@ const Navigation = () => {
             </svg>
 
             <h3>Cart</h3>
-            <span className="border px-2 rounded-full bg-red-500 text-white">
-              {cart.length}
-            </span>
+            {cartData?.data && (
+              <span className="border px-2 rounded-full bg-red-500 text-white">
+                {cartData?.data.items.length}
+              </span>
+            )}
           </NavLink>
         </section>
       </main>

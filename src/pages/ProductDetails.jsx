@@ -46,7 +46,7 @@ export default function ProductDetails() {
     }
   }
 
-  const isProductInCart = cart.some((value) => value.id === product.id);
+  // const isProductInCart = cart.some((value) => value.id === product.id);
 
   const increaseQuantity = () => {
     setQuantity((prev) => prev + 1);
@@ -65,7 +65,7 @@ export default function ProductDetails() {
   if (loading)
     return (
       <div className="text-center py-8">
-        <Loader />
+        <Loader title="Findin product details ..." />
       </div>
     );
   if (!product || !product.id)
@@ -161,15 +161,11 @@ export default function ProductDetails() {
                   <tr className="text-center">
                     <td className="text-left flex gap-10 font-medium">
                       <button
-                        onClick={() => !isProductInCart && addToCart(product)}
-                        className={`max-w-full w-16 h-8 ${
-                          isProductInCart
-                            ? "bg-gray-300 text-gray-500 cursor-not-allowed border-gray-300"
-                            : "bg-[#f3f9fb] hover:bg-[#53b32d] hover:text-white text-[#53b32d] border-[#afb0b1]"
-                        } w-32 border font-medium rounded-sm transition h-10 duration-200`}
-                        disabled={isProductInCart}
+                        onClick={() => addToCart(product)}
+                        className={`max-w-full bg-[#f3f9fb] hover:bg-[#53b32d] hover:text-white text-[#53b32d] border-[#afb0b1]"
+                       w-32 border font-medium rounded-sm transition h-10 duration-200`}
                       >
-                        {isProductInCart ? "Added" : "Add to Cart"}
+                        Add to Cart
                       </button>
 
                       <button

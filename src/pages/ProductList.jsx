@@ -1,78 +1,53 @@
 import Categories from "../components/Categories";
 import { ArrowRight2, Category, ArrowLeft2 } from "iconsax-react";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, use } from "react";
 import { apiUrl } from "../constants";
 import ProductCard from "../components/ProductCard";
 import { CartContext } from "../context/cartContext";
 import Loader from "../components/Loarder";
+import useSWR from "swr";
 
 export default function ProductList() {
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
   const [subcategories, setSubCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const endpoint = "api/products";
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [pageNumber, setPageNumber] = useState(1);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const { addToCart, searchQuery, addToCartMutating } = useContext(CartContext);
 
-  const filtersByCategory = "api/categories";
+  const {
+    data: products,
+    isLoading,
+    error,
+  } = useSWR(
+    `${apiUrl}api/products?${
+      selectedCategory ? `category=${selectedCategory}` : ""
+    }&per_page=${itemsPerPage}&page=${pageNumber}&search=${searchQuery}`
+  );
 
-  const { addToCart } = useContext(CartContext);
-
-  let url = apiUrl + endpoint;
-  const categoryUrl = apiUrl + filtersByCategory;
-
-  const apiHeaders = {
-    Accept: "application/json",
-    "ngrok-skip-browser-warning": "23456",
-  };
-
-  async function fetchAllProduct() {
-    setIsLoading(true);
-    if (selectedCategory) {
-      url = `${url}?category=${selectedCategory}`;
-    }
-    const response = await fetch(url, {
-      headers: {
-        ...apiHeaders,
-      },
-    });
-    if (response.status === 200) {
-      setIsLoading(false);
-      const responseData = await response.json();
-      setProducts(responseData.data.data);
-    }
-  }
-
-  async function fetchAllCategoryList() {
-    const response = await fetch(categoryUrl, {
-      headers: {
-        ...apiHeaders,
-      },
-    });
-    console.log(response);
-    if (response.status === 200) {
-      const responseData = await response.json();
-      console.log(responseData.data);
-      const categories = responseData.data;
-
-      if (categories.length > 0) {
-        const childrenList = categories
-          .map((category) => category.children)
-          .flat();
-        console.log(childrenList);
-        setSubCategories(childrenList);
-        // setProducts(responseData.data.data);
-      }
-    }
-  }
+  const {
+    data: categories,
+    isLoading: categoryLoading,
+    error: categoryError,
+  } = useSWR(`${apiUrl}api/categories`);
 
   useEffect(() => {
-    fetchAllCategoryList();
-  }, []);
+    if (categories && categories.data) {
+      const childrenList = categories.data
+        .map((category) => category.children)
+        .flat();
+      console.log(childrenList);
+      setSubCategories(childrenList);
+    }
+  }, [categories]);
 
-  useEffect(() => {
-    fetchAllProduct();
-  }, [selectedCategory]);
+
+  if(addToCartMutating) {
+    return (
+      <Loader title="Adding product to cart ..." />
+    )
+  }
 
   return (
     <section className="px-28 mb-10 pt-28">
@@ -160,23 +135,28 @@ export default function ProductList() {
         <div className="px-8 pt-6 flex-1 flex flex-col gap-5">
           <div className="bg-gray-200 rounded-md h-11 flex items-center justify-between px-3">
             <div className="flex items-center justify-between  flex-1 ">
-              <p>Showing all 16 results</p>
-              <div className="px-12">
+              <p>Showing all {products?.data.total} results</p>
+              {/* <div className="px-12">
                 <lable>Sort by:</lable>
                 <select className="outline-none" name="" id="">
                   <option value="">Lastest</option>
                   <option value="">Oldest</option>
                 </select>
-              </div>
+              </div> */}
             </div>
             <div className="flex gap-2 items-center w-38 justify-between">
               <div className="flex items-center gap-4">
                 <label htmlFor="">Show:</label>
-                <select className="outline-none" name="" id="">
-                  <option value="">10</option>
-                  <option value="">20</option>
-                  <option value="">50</option>
-                  <option value="">100</option>
+                <select
+                  onChange={(event) => setItemsPerPage(event.target.value)}
+                  className="outline-none"
+                  name=""
+                  id=""
+                >
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
                 </select>
               </div>
               <div className="w-8 py-1 place-items-center rounded-md bg-gray-400">
@@ -185,13 +165,11 @@ export default function ProductList() {
             </div>
           </div>
           {isLoading && (
-            <div>
-              <Loader />
-            </div>
+              <Loader title="Loading products ..." />
           )}
           <section className="grid relative grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center items-center pt-5 gap-3">
-            {products.length > 0 ? (
-              products.map((product, index) => (
+            {products?.data.data.length > 0 ? (
+              products?.data.data.map((product, index) => (
                 <ProductCard
                   id={product.id}
                   image={product.main_image_url}
@@ -212,18 +190,37 @@ export default function ProductList() {
             )}
           </section>
           <div className="flex justify-between gap-10 py-10">
-            <span className="w-12 h-12 rounded-full cursor-pointer border border-gray-200 hover:bg-[#53b32d] hover:border-[#53b32d] flex items-center justify-center">
-              <ArrowLeft2
-                size="32"
-                className="hover:stroke-white  stroke-gray-400"
-              />
-            </span>
-            <span className="w-12 h-12 rounded-full cursor-pointer border border-gray-200 hover:bg-[#53b32d] hover:border-[#53b32d] flex items-center justify-center">
-              <ArrowRight2
-                size="32"
-                className="hover:stroke-white  stroke-gray-400"
-              />
-            </span>
+            {products?.data.prev_page_url && (
+              <span
+                onClick={() =>
+                  setPageNumber((prev) =>
+                    products?.data.prev_page_url ? prev - 1 : prev
+                  )
+                }
+                className="w-12 h-12 rounded-full cursor-pointer border border-gray-200 hover:bg-[#53b32d] hover:border-[#53b32d] flex items-center justify-center"
+              >
+                <ArrowLeft2
+                  size="32"
+                  className="hover:stroke-white  stroke-gray-400"
+                />
+              </span>
+            )}
+
+            {products?.data.next_page_url && (
+              <span
+                onClick={() =>
+                  setPageNumber((prev) =>
+                    products?.data.next_page_url ? prev + 1 : 1
+                  )
+                }
+                className="w-12 h-12 rounded-full cursor-pointer border border-gray-200 hover:bg-[#53b32d] hover:border-[#53b32d] flex items-center justify-center"
+              >
+                <ArrowRight2
+                  size="32"
+                  className="hover:stroke-white  stroke-gray-400"
+                />
+              </span>
+            )}
           </div>
         </div>
       </section>

@@ -1,4 +1,4 @@
-export default function Loader() {
+export default function Loader({title}) {
   return (
     <div className="flex flex-col justify-center items-center h-screen">
       <div className="flex flex-row p-4 text-4xl font-extrabold">
@@ -22,6 +22,7 @@ export default function Loader() {
         </span>
         <h1 className="text-yellow-400">Circle</h1>
       </div>
+      <h1 className=" text-lg font-extralight"> {title} </h1>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 200 200"

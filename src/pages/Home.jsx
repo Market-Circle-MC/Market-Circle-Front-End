@@ -13,13 +13,6 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  // const [cart, setCart] = useState([]);
-
-  // const addToCart = (product) => {
-  //   // setIsAdding(true);
-  //   setCart((prev) => [...prev, product]);
-  // };
-  // const method = "GET";
   const endpoint = "api/categories";
 
   const productendpoint = "api/products";
@@ -47,33 +40,6 @@ export default function Home() {
   }
 
   const url = apiUrl + endpoint;
-
-  // const fetchAllCategories = async () => {
-  //   const response = await fetch(url, {
-  //     headers: {
-  //       ...apiHeaders,
-  //     },
-  //   });
-  //   if (response.status === 200) {
-  //     const responseData = await response.json();
-  //     const productMap = {};
-  //     console.log(responseData.data);
-  //     responseData.data?.forEach(async (product) => {
-  //       console.log(product);
-  //       if (!productMap[product.name]) {
-  //         productMap[product.name] = [];
-  //       }
-  //       const singleProduct = await fetchAllProduct(product.slug);
-
-  //       console.log(singleProduct);
-  //       if (singleProduct.length > 0) {
-  //         productMap[product.name].push(products);
-  //         setProducts(productMap);
-  //       }
-  //     });
-  //     setCategories(responseData.data);
-  //   }
-  // };
 
   const fetchAllCategories = async () => {
     try {
@@ -129,7 +95,7 @@ export default function Home() {
   }, []);
 
   if (isLoading) {
-    return <Loader />;
+    return <Loader title="Fetching products ..." />;
   }
 
   return (
@@ -153,7 +119,7 @@ export default function Home() {
                       <span className="text-[#53b32d]">{productCategory}</span>
                     </h2>
                     <Link
-                      to="/product-list/bath-and-body"
+                      to="/product-list"
                       className="flex justify-center items-center gap-1 cursor-pointer"
                     >
                       View All

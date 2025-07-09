@@ -14,6 +14,8 @@ import UserDashboard from "./pages/UserDashboard.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { CartProvider } from "./context/cartContext.jsx";
+import useSWR, { SWRConfig } from 'swr'
+import SignUp from "./pages/SignUp.jsx";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +32,7 @@ const router = createBrowserRouter([
         element: <Cart />,
       },
       {
-        path: "/home",
+        path: "home",
         element: <Home />,
       },
       {
@@ -38,7 +40,7 @@ const router = createBrowserRouter([
         element: <ProductDetails />,
       },
       {
-        path: "product-list/:category",
+        path: "product-list",
         element: <ProductList />,
       },
       {
@@ -57,16 +59,30 @@ const router = createBrowserRouter([
         path: "admindashboard",
         element: <AdminDashboard />,
       },
+
+       {
+        path: "signup",
+        element: <SignUp />,
+      },
     ],
   },
 ]);
 
+
+
+
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+     <SWRConfig 
+      value={{
+        refreshInterval: 3000,
+        fetcher: (resource, init) => fetch(resource, init).then(res => res.json())
+      }}
+    >
       <CartProvider>
         <RouterProvider router={router} />
       </CartProvider>
-    </GoogleOAuthProvider>
+    </SWRConfig>
   </StrictMode>
 );

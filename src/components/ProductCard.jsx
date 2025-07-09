@@ -15,7 +15,7 @@ const ProductCard = ({
   const { cart } = useContext(CartContext);
   // const addToCart = async () => {
   //   setIsAdding(true);
-  const isProductInCart = cart.some((value) => value.id === id);
+  // const isProductInCart = cart.some((value) => value.id === id);
   // try {
   //   const cartData = {
   //     id: 1,
@@ -55,8 +55,8 @@ const ProductCard = ({
   // };
 
   return (
-    <div className="max-w-sm border border-gray-200 shadow-sm w-66x rounded-2xl gap-5 bg-white flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
-      <div className="max-h-60 h-60 flex justify-centers relative">
+    <div className="max-w-sm border h-82 py-4 border-gray-200 shadow-sm w-66x rounded-2xl gap-5 bg-white flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
+      <div className="max-h-60  flex justify-centers relative">
         {discount ? (
           <div className="absolute top-3 bg-red-100 text-red-600 left-3 text-xs font-bold px-2 py-1 rounded">
             {discount}% OFF
@@ -91,14 +91,11 @@ const ProductCard = ({
             )}
           </div>
           <Button
-            className={`max-w-full w-16 h-8 ${
-              isProductInCart
-                ? "bg-gray-300 text-white"
-                : "bg-[#f3f9fb] hover:bg-[#53b32d]"
-            } hover:text-white cursor-pointer text-[#53b32d] border border-[#afb0b1] font-medium rounded-sm transition duration-200`}
-            label={isProductInCart ? "Added" : "ADD"}
+            className={`max-w-full w-16 h-8 
+              bg-[#f3f9fb] hover:bg-[#53b32d]
+           hover:text-white cursor-pointer text-[#53b32d] border border-[#afb0b1] font-medium rounded-sm transition duration-200`}
+            label={"ADD"}
             onClick={addToCart}
-            disabled={isProductInCart}
           />
         </div>
       </div>

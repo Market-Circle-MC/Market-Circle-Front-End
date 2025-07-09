@@ -19,7 +19,7 @@ const CheckoutPage = () => {
     paymentMethod: "cash", // Default payment method
   });
 
-  const { subtotal, total, deliveryFee } = useContext(CartContext);
+  const { cartData, subtotal, total, deliveryFee } = useContext(CartContext);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -290,7 +290,7 @@ const CheckoutPage = () => {
               <div className="border-t border-gray-200 pt-4 mt-4">
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>Subtotal</span>
-                  <span>GHS {subtotal.toFixed(2)}</span>
+                  <span>GHS {cartData?.data.total.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm text-gray-600 mt-2">
                   <span>Delivery Fee</span>
@@ -298,7 +298,7 @@ const CheckoutPage = () => {
                 </div>
                 <div className="flex justify-between font-medium text-gray-900 mt-4 pt-4 border-t border-gray-200">
                   <span>Total</span>
-                  <span>GHS {total.toFixed(2)}</span>
+                  <span>GHS {cartData?.data.total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
