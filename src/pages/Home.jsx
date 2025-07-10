@@ -100,7 +100,7 @@ export default function Home() {
 
   return (
     <div className="pt-28">
-      <section className="px-28 ">
+      <section className="px-28  w-full overflow-auto ">
         <Categories />
       </section>
       <HeroBanner />
@@ -126,25 +126,26 @@ export default function Home() {
                       <ArrowRight2 size="20" color="#53b32d" />
                     </Link>
                   </div>
-                  <section className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 justify-center pt-5 gap-5">
-                    {categoryProducts.length > 0 ? (
-                      categoryProducts
-                        .flat()
-                        .map((product, index) => (
-                          <ProductCard
-                            id={product.id}
-                            image={product.main_image_url}
-                            key={index}
-                            title={product.name}
-                            price={product.current_price}
-                            oldPrice={product.price_per_unit}
-                            discount={product.discount || 30}
-                            addToCart={() => addToCart(product)}
-                          />
+                  <section className="pt-5">
+                    <div className="flex gap-5 overflow-x-auto pb-4">
+                      {categoryProducts.length > 0 ? (
+                        categoryProducts.flat().map((product, index) => (
+                          <div key={index} className="min-w-[220px]">
+                            <ProductCard
+                              id={product.id}
+                              image={product.main_image_url}
+                              title={product.name}
+                              price={product.current_price}
+                              oldPrice={product.price_per_unit}
+                              discount={product.discount || 30}
+                              addToCart={() => addToCart(product)}
+                            />
+                          </div>
                         ))
-                    ) : (
-                      <span>Product under this category coming soon</span>
-                    )}
+                      ) : (
+                        <span>Product under this category coming soon</span>
+                      )}
+                    </div>
                   </section>
                 </div>
               )
@@ -153,20 +154,6 @@ export default function Home() {
             <span>No products found</span>
           )}
         </section>
-        {/* <div className="flex justify-center gap-10 py-10">
-          <span className="w-12 h-12 rounded-full cursor-pointer border border-gray-200 hover:bg-[#53b32d] hover:border-[#53b32d] flex items-center justify-center">
-            <ArrowLeft2
-              size="32"
-              className="hover:stroke-white  stroke-gray-400"
-            />
-          </span>
-          <span className="w-12 h-12 rounded-full cursor-pointer border border-gray-200 hover:bg-[#53b32d] hover:border-[#53b32d] flex items-center justify-center">
-            <ArrowRight2
-              size="32"
-              className="hover:stroke-white  stroke-gray-400"
-            />
-          </span>
-        </div> */}
       </section>
     </div>
   );
