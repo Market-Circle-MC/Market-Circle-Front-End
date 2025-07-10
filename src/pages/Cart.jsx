@@ -21,17 +21,16 @@ const Cart = () => {
     handleRemove,
     clearCart,
     removeMutating,
-    clearCartMutating
+    clearCartMutating,
   } = useContext(CartContext);
 
-    if (clearCartMutating) {
+  if (clearCartMutating) {
     return (
       <div className="w-full h-screen flex items-center justify-center">
-        <Loader  title="Clearing cart ..." />
+        <Loader title="Clearing cart ..." />
       </div>
     );
   }
-
 
   if (removeMutating) {
     return (
@@ -83,7 +82,9 @@ const Cart = () => {
                         className="w-20 h-20 object-cover rounded-lg"
                       />
                       <div className="flex-1 flex flex-col gap-2 max-w-lg w-full">
-                        <h2 className="text-base font-semibold">{item.product.name}</h2>
+                        <h2 className="text-base font-semibold">
+                          {item.product.name}
+                        </h2>
                         <span className="flex items-center gap-2">
                           <InfoCircle
                             variant="Outline"
@@ -149,7 +150,9 @@ const Cart = () => {
                 <h2 className="text-xl font-bold">Cart Summary</h2>
                 <div className="flex justify-between text-sm">
                   <span>Subtotal</span>
-                  <span className="text-lg">GHS₵ {cartData.data.total.toFixed(2)}</span>
+                  <span className="text-lg">
+                    GHS₵ {cartData.data.total.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Delivery Fee</span>

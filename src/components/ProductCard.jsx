@@ -69,7 +69,7 @@ const ProductCard = ({
           <img
             src={image}
             alt="Product"
-            className="w-full object-cover rounded-tl-xl rounded-tr-xl"
+            className="w-full object-cover h-52 rounded-tl-xl rounded-tr-xl"
           />
         </a>
       </div>

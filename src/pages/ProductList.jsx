@@ -42,11 +42,8 @@ export default function ProductList() {
     }
   }, [categories]);
 
-
-  if(addToCartMutating) {
-    return (
-      <Loader title="Adding product to cart ..." />
-    )
+  if (addToCartMutating) {
+    return <Loader title="Adding product to cart ..." />;
   }
 
   return (
@@ -164,10 +161,8 @@ export default function ProductList() {
               </div>
             </div>
           </div>
-          {isLoading && (
-              <Loader title="Loading products ..." />
-          )}
-          <section className="grid relative grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center items-center pt-5 gap-3">
+          {isLoading && <Loader title="Loading products ..." />}
+          <section className="grid relative grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center items-center pt-5 gap-3 ">
             {products?.data.data.length > 0 ? (
               products?.data.data.map((product, index) => (
                 <ProductCard
@@ -182,14 +177,14 @@ export default function ProductList() {
                 />
               ))
             ) : (
-              <div className=" absolute w-full h-96 grid left-[500px] top-48 -translate-y-1/2 -translate-x-1/2 items-center justify-center">
+              <div className=" absolute w-full h-96 grid left-[500px] top-48 -translate-y-1/2 -translate-x-1/2 items-center justify-center ">
                 <span className="text-2xl text-gray-400">
                   No product available
                 </span>
               </div>
             )}
           </section>
-          <div className="flex justify-between gap-10 py-10">
+          <div className="flex justify-between gap-10 py-10 ">
             {products?.data.prev_page_url && (
               <span
                 onClick={() =>

@@ -42,8 +42,7 @@ const CartProvider = ({ children }) => {
       .catch((err) => err);
   };
 
-
-    const clearFromCart = async (url, args) => {
+  const clearFromCart = async (url, args) => {
     return fetch(url, {
       method: "POST",
       headers: {
@@ -56,7 +55,7 @@ const CartProvider = ({ children }) => {
       .catch((err) => err);
   };
 
-    const {
+  const {
     data: clearCartData,
     isMutating: clearCartMutating,
     error: clearCartError,
@@ -106,23 +105,24 @@ const CartProvider = ({ children }) => {
       .catch((err) => err);
   };
 
-  const { data, isMutating: addToCartMutating, error, trigger } = useSWRMutation(
-    `${apiUrl}api/cart/add`,
-    addToCard,
-    {
-      onSuccess: (data) => {
-        toast.success(data?.message, {
-          theme: "colored",
-        });
-      },
-      onError: (err) => {
-        console.error(err);
-      },
-    }
-  );
+  const {
+    data,
+    isMutating: addToCartMutating,
+    error,
+    trigger,
+  } = useSWRMutation(`${apiUrl}api/cart/add`, addToCard, {
+    onSuccess: (data) => {
+      toast.success(data?.message, {
+        theme: "colored",
+      });
+    },
+    onError: (err) => {
+      console.error(err);
+    },
+  });
 
   const clearCart = async () => {
-    await clearCartTrigger()
+    await clearCartTrigger();
   };
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -191,7 +191,7 @@ const CartProvider = ({ children }) => {
         clearCart,
         addToCartMutating,
         removeMutating,
-        clearCartMutating
+        clearCartMutating,
       }}
     >
       {children}
