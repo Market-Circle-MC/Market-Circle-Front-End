@@ -1,8 +1,9 @@
 import { apiUrl } from "@/constants";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "@/context/AuthContext";
 
 const Register = () => {
   const {
